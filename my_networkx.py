@@ -1,8 +1,3 @@
-# web上で拾ってきたライブラリ
-# 筑波>研究室>Network interdiction Model に保存済み
-# https://stackoverflow.com/questions/22785849/drawing-multiple-edges-between-two-nodes-with-networkx
-# https://networkx.org/documentation/stable/auto_examples/index.html
-
 def my_draw_networkx_edge_labels(
     G,
     pos,

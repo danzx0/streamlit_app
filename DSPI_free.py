@@ -111,16 +111,16 @@ list_Arcs.sort()
 tuple_A = list_to_tuple(list_A)
 tuple_Arcs = list_to_tuple(list_Arcs)
 
-print('n, m, s, t, budget')
-print(n, m, s, t, budget)
-print('G')
-print(G)
-print('G_reverse')
-print(G_reverse)
-print('tuple_A')
-print(tuple_A)
-print('tuple_Arcs')
-print(tuple_Arcs)
+# print('n, m, s, t, budget')
+# print(n, m, s, t, budget)
+# print('G')
+# print(G)
+# print('G_reverse')
+# print(G_reverse)
+# print('tuple_A')
+# print(tuple_A)
+# print('tuple_Arcs')
+# print(tuple_Arcs)
 
 # z_star, z_barの定義 (キー : tuple, 要素 : list)
 z_star = defaultdict(list)
@@ -130,20 +130,20 @@ next_z_bar = defaultdict(list)
 
 # 何も阻止されていない場合で逆向きのダイクストラを行い, 前にいた頂点のリストとコストを出力
 prev, d = dijkstra(n-1, n)
-print('Sが空集合のときのprev')
-print(prev)
-print('Sが空集合のときのtからのコスト')
-print(d)
+# print('Sが空集合のときのprev')
+# print(prev)
+# print('Sが空集合のときのtからのコスト')
+# print(d)
 
 # 経路を復元して, all-to-t-shortest path tree Tを作成
 T = get_T(prev)
-print('T')
-print(T)
+# print('T')
+# print(T)
 
 # |S|==bを満たすSの集合cを定義する
 c = list(itertools.combinations(tuple_A, budget))
-print('c')
-print(c)
+# print('c')
+# print(c)
 
 # |S|==bの各Sについて, Tの辺を含むか判定し, 含む場合はGを定義してダイクストラを行う.
 for S in c:
@@ -158,15 +158,15 @@ for S in c:
             G_reverse[j[1]].append((j[0], j[2]))
     if flag:
         prev, list_z_star_S = dijkstra(n-1, n)
-        print('S, z_star_S, prev')
-        print(S, list_z_star_S, prev)
+        # print('S, z_star_S, prev')
+        # print(S, list_z_star_S, prev)
         z_star[S] = list_z_star_S
         next_z_star[S] = [[(), -1] for i in range(n)]
-        print(next_z_star[S])
+        # print(next_z_star[S])
         for i in range(n-1):
             next_z_star[S][i] = (S, prev[i])
-print('z_star')
-print(z_star)
+# print('z_star')
+# print(z_star)
 
 # DP-DSPIの2行目
 for k in range(budget-1, -1, -1):
@@ -177,19 +177,19 @@ for k in range(budget-1, -1, -1):
         next_z_bar[S] = [[(), -1] for i in range(n)]
         next_z_star[S] = [[(), -1] for i in range(n)]
         list_S = tuple_to_list(S)
-        print('list_S')
-        print(list_S)
+        # print('list_S')
+        # print(list_S)
         for i in range(n):
             A_i = copy.deepcopy(G[i])
-            print('A_i')
-            print(A_i)
+            # print('A_i')
+            # print(A_i)
             # A_iの要素のうち, すでにSに含まれているものを削除
             for item in list_S:
                 if item in A_i:
                     A_i.remove(item)
             num = len(A_i)
-            print('list_S, i, A_i')
-            print(list_S, i, A_i)
+            # print('list_S, i, A_i')
+            # print(list_S, i, A_i)
             if num > 0:
                 # bit全探索でS_primeを全列挙する
                 max_val = 0
@@ -208,8 +208,8 @@ for k in range(budget-1, -1, -1):
                     new_S = list_to_tuple(new_S)
                     # z_star[new_S]が存在するかの判定
                     if z_star[new_S] == []:
-                        print('含まれないの発見')
-                        print(S, i, new_S)
+                        # print('含まれないの発見')
+                        # print(S, i, new_S)
                         continue
                     min_val = INF
                     # new_min_S = new_S
@@ -229,8 +229,8 @@ for k in range(budget-1, -1, -1):
                         new_max_i = new_min_i
                 z_bar[S][i] = max_val
                 next_z_bar[S][i] = (new_max_S, new_max_i)
-        print('z_bar[' + str(S) + ']')
-        print(z_bar[S])
+        # print('z_bar[' + str(S) + ']')
+        # print(z_bar[S])
         l = [INF] * n
         l[t] = 0
         l_caron = [INF] * n
@@ -263,16 +263,16 @@ for k in range(budget-1, -1, -1):
                         heappush(l_Q, (l[i], i))
         ans = copy.deepcopy(l)
         z_star[S] = ans
-        print('z_star[S]')
-        print(z_star[S])
-print('z_bar')
-print(z_bar)
-for i in z_bar.items():
-    print(i)
-print('z_star')
-print(z_star)
-for i in z_star.items():
-    print(i)
+#         print('z_star[S]')
+#         print(z_star[S])
+# print('z_bar')
+# print(z_bar)
+# for i in z_bar.items():
+#     print(i)
+# print('z_star')
+# print(z_star)
+# for i in z_star.items():
+    # print(i)
 
 now_node = 0
 now_S = tuple()
@@ -459,30 +459,30 @@ nx.draw_networkx_edge_labels(graph, pos, ax=ax, edge_labels=passed_straight_edge
 nx.draw_networkx_edge_labels(graph, pos, ax=ax, edge_labels=passed_interdicted_straight_edge_labels,rotate=False)
 plt.show()
 
-print('straight_edges')
-print(straight_edges)
-print('interdicted_straight_edges')
-print(interdicted_straight_edges)
-print('pass_straight_edge')
-print(pass_straight_edge)
-print('pass_interdicted_straight_edge')
-print(pass_interdicted_straight_edge)
-print('passed_straight_edges')
-print(passed_straight_edges)
-print('passed_interdicted_straight_edges')
-print(passed_interdicted_straight_edges)
-print('curved_edges')
-print(curved_edges)
-print('interdicted_curved_edges')
-print(interdicted_curved_edges)
-print('pass_curved_edge')
-print(pass_curved_edge)
-print('pass_interdicted_curved_edge')
-print(pass_interdicted_curved_edge)
-print('passed_curved_edges')
-print(passed_curved_edges)
-print('passed_interdicted_curved_edges')
-print(passed_interdicted_curved_edges)
+# print('straight_edges')
+# print(straight_edges)
+# print('interdicted_straight_edges')
+# print(interdicted_straight_edges)
+# print('pass_straight_edge')
+# print(pass_straight_edge)
+# print('pass_interdicted_straight_edge')
+# print(pass_interdicted_straight_edge)
+# print('passed_straight_edges')
+# print(passed_straight_edges)
+# print('passed_interdicted_straight_edges')
+# print(passed_interdicted_straight_edges)
+# print('curved_edges')
+# print(curved_edges)
+# print('interdicted_curved_edges')
+# print(interdicted_curved_edges)
+# print('pass_curved_edge')
+# print(pass_curved_edge)
+# print('pass_interdicted_curved_edge')
+# print(pass_interdicted_curved_edge)
+# print('passed_curved_edges')
+# print(passed_curved_edges)
+# print('passed_interdicted_curved_edges')
+# print(passed_interdicted_curved_edges)
 
 # 5 9 0 4 2 0 1 2 2 0 2 6 2 1 2 3 4 1 3 1 2 1 4 4 8 2 1 4 2 2 4 2 4 3 1 2 4 3 4 4 4
 # 5 6 0 4 2 0 1 1 2 0 2 1 2 1 4 1 10 2 3 1 2 2 4 3 1 3 4 1 10
