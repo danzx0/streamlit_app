@@ -205,5 +205,6 @@ def display():
     input_list = list(map(int, input_text.split()))
     # DSPIの実行とグラフ描画を実行するボタンを表示する
     if st.button('Run DSPI'):
-        z_star, next_z_star, tuple_Arcs, tuple_A = DSPI_free.get_DSPI_free(input_list)
+        dspi = DSPI_free.Dspi()
+        z_star, next_z_star, tuple_Arcs, tuple_A = dspi.get_DSPI_free(input_list)
         graph_drawing(input_list, z_star, next_z_star, tuple_Arcs, tuple_A)
