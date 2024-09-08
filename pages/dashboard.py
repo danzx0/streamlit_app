@@ -395,29 +395,29 @@ def display():
     input_text = st.text_input('Graph Data')
     input_list = list(map(int, input_text.split()))
     option_type = st.selectbox('Select the type of Interdiction', ['Cost increase', 'Remove arcs'])
-    option_constraints = st.selectbox('Select constraint', ['free  (Interdict any number of arcs at a time)', 'at most  (Interdict up to one at a time)', 'at least  (More than 1 Interdict at a time)', 'exactly  (Interdict 1 at a time)'])
+    option_constraints = st.selectbox('Select constraint', ['free (Interdict any number of arcs at a time)', 'at most (Interdict up to one at a time)', 'at least (More than 1 Interdict at a time)', 'exactly (Interdict 1 at a time)'])
 
     # DSPIの実行とグラフ描画を実行するボタンを表示する
     if st.button('Run DSPI'):
         if option_type == 'Cost increase':
-            if option_constraints == 'free  (Interdict any number of arcs at a time)':
+            if option_constraints == 'free (Interdict any number of arcs at a time)':
                 z_star, next_z_star, tuple_Arcs, tuple_A = DSPI_free.get_DSPI_free(input_list)
                 graph_drawing_cost_increase(input_list, z_star, next_z_star, tuple_Arcs, tuple_A)
-            elif option_constraints == 'at most  (Interdict up to one at a time)':
+            elif option_constraints == 'at most (Interdict up to one at a time)':
                 z_star, next_z_star, tuple_Arcs, tuple_A = DSPI_at_most.get_DSPI_at_most(input_list)
                 graph_drawing_cost_increase(input_list, z_star, next_z_star, tuple_Arcs, tuple_A)
-            elif option_constraints == 'at least  (More than 1 Interdict at a time)':
+            elif option_constraints == 'at least (More than 1 Interdict at a time)':
                 z_star, next_z_star, tuple_Arcs, tuple_A = DSPI_at_least.get_DSPI_at_least(input_list)
                 graph_drawing_cost_increase(input_list, z_star, next_z_star, tuple_Arcs, tuple_A)
             else:
                 z_star, next_z_star, tuple_Arcs, tuple_A = DSPI_exactly.get_DSPI_exactly(input_list)
                 graph_drawing_cost_increase(input_list, z_star, next_z_star, tuple_Arcs, tuple_A)
         else:
-            if option_constraints == 'free':
+            if option_constraints == 'free (Interdict any number of arcs at a time)':
                 '作成中'
-            elif option_constraints == 'at most':
+            elif option_constraints == 'at most (Interdict up to one at a time)':
                 '作成中'
-            elif option_constraints == 'at least':
+            elif option_constraints == 'at least (More than 1 Interdict at a time)':
                 '作成中'
             else:
                 '作成中'
