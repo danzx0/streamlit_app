@@ -8,7 +8,7 @@ import networkx as nx
 
 # import my_networkx as my_nx
 
-INF = 10 ** 9
+# INF = 10 ** 9
 # リストからタプルへ変換 O(NlogN)
 def list_to_tuple(x):
     return tuple(list_to_tuple(item) if isinstance(item, list) else item for item in x)
@@ -84,6 +84,7 @@ def get_T(n, prev):
 # # アークの集合(始点, 終点)
 # Arcs = ((0, 1), (0, 2), (1, 4), (2, 3), (2, 4), (3, 4))
 def get_DSPI_free(input_list):
+    INF = 10 ** 9
     # input_list = list(map(int, input().split()))
     n, m, s, t, budget = input_list[0], input_list[1], input_list[2], input_list[3], input_list[4]
     # graph = nx.DiGraph()
@@ -130,7 +131,7 @@ def get_DSPI_free(input_list):
     input_list
 
     # 何も阻止されていない場合で逆向きのダイクストラを行い, 前にいた頂点のリストとコストを出力
-    prev, d = dijkstra(n - 1, n, G_rev)
+    prev, d = dijkstra(n - 1, n, INF, G_rev)
     # print('Sが空集合のときのprev')
     # print(prev)
     # print('Sが空集合のときのtからのコスト')
@@ -158,7 +159,7 @@ def get_DSPI_free(input_list):
             else:
                 G_rev[j[1]].append((j[0], j[2]))
         if flag:
-            prev, list_z_star_S = dijkstra(n - 1, n, G_rev)
+            prev, list_z_star_S = dijkstra(n - 1, n, INF, G_rev)
             # print('S, z_star_S, prev')
             # print(S, list_z_star_S, prev)
             z_star[S] = list_z_star_S
