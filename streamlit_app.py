@@ -1,3 +1,10 @@
 import streamlit as st
 
-st.radio("テスト", ('テスト１', 'テスト２', 'テスト３'))
+from pages import dashboard
+
+def main():
+    st.title('Dynamic Shortest-path Interdiction')
+    dashboard.display()
+
+if __name__ == "__main__":
+    main()
