@@ -7,7 +7,7 @@ import copy
 
 from . import my_modules
 
-def get_DSPI_at_most(input_list):
+def get_DSPI_exactly(input_list):
     INF = 10 ** 9
     # input_list = list(map(int, input().split()))
     n, m, s, t, budget = input_list[0], input_list[1], input_list[2], input_list[3], input_list[4]
@@ -26,7 +26,7 @@ def get_DSPI_at_most(input_list):
         G_rev[b].append([a, w])
         # A += ((a, b, w, p), )
         # Arcs += ((a, b), )
-        list_A.append((a, b, w, p))
+        list_A.append([a, b, w, p])
         list_Arcs.append((a, b))
 
     for i in range(n):

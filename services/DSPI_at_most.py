@@ -26,7 +26,7 @@ def get_DSPI_at_most(input_list):
         G_rev[b].append([a, w])
         # A += ((a, b, w, p), )
         # Arcs += ((a, b), )
-        list_A.append((a, b, w, p))
+        list_A.append([a, b, w, p])
         list_Arcs.append((a, b))
 
     for i in range(n):
