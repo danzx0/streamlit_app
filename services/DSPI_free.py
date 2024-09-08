@@ -90,8 +90,8 @@ class Dspi:
         self.n, m, s, t, budget = input_list[0], input_list[1], input_list[2], input_list[3], input_list[4]
         # graph = nx.DiGraph()
         # edge_list = []
-        G = [[] for i in range(n)]
-        self.G_reverse = [[] for i in range(n)]
+        G = [[] for i in range(self.n)]
+        self.G_reverse = [[] for i in range(self.n)]
         # A, Arcs = (), ()
         list_A, list_Arcs = [], []
 
