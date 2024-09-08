@@ -9,7 +9,6 @@ import networkx as nx
 # import my_networkx as my_nx
 class Dspi:
     INF = 10 ** 9
-    G_reverse = []
     n = 0
     # リストからタプルへ変換 O(NlogN)
     def list_to_tuple(self, x):
@@ -20,7 +19,7 @@ class Dspi:
         return list(self.tuple_to_list(item) if isinstance(item, tuple) else item for item in x)
 
     # ダイクストラ法 O(N+MlogN)
-    def dijkstra(self, s, n):
+    def dijkstra(self, s, n, G_reverse):
         dist = [self.INF] * n
         prev = [-1] * n
         hq = [(0, s)]
@@ -31,7 +30,7 @@ class Dspi:
             if visited[i]:
                 continue
             visited[i] = True
-            for j, k in self.G_reverse[i]:
+            for j, k in G_reverse[i]:
                 if not visited[j] and dist[i] + k < dist[j]:
                     dist[j] = dist[i] + k
                     prev[j] = i
@@ -91,7 +90,7 @@ class Dspi:
         # graph = nx.DiGraph()
         # edge_list = []
         G = [[] for i in range(self.n)]
-        self.G_reverse = [[] for i in range(self.n)]
+        G_reverse = [[] for i in range(self.n)]
         # A, Arcs = (), ()
         list_A, list_Arcs = [], []
 
@@ -99,7 +98,7 @@ class Dspi:
             a, b, w, p = input_list[i*4+5], input_list[i*4+6], input_list[i*4+7], input_list[i*4+8]
             # edge_list.append((a, b, {'weight':w, 'plus':p}))
             G[a].append([a, b, w, p])
-            self.G_reverse[b].append([a, w])
+            G_reverse[b].append([a, w])
             # A += ((a, b, w, p), )
             # Arcs += ((a, b), )
             list_A.append((a, b, w, p))
@@ -107,7 +106,7 @@ class Dspi:
 
         for i in range(self.n):
             G[i].sort()
-            self.G_reverse[i].sort()
+            G_reverse[i].sort()
         list_A.sort()
         list_Arcs.sort()
         tuple_A = self.list_to_tuple(list_A)
@@ -130,7 +129,7 @@ class Dspi:
         next_z_bar = defaultdict(list)
 
         # 何も阻止されていない場合で逆向きのダイクストラを行い, 前にいた頂点のリストとコストを出力
-        prev, d = self.dijkstra(self.n - 1, self.n, self.G_reverse)
+        prev, d = self.dijkstra(self.n - 1, self.n, G_reverse)
         # print('Sが空集合のときのprev')
         # print(prev)
         # print('Sが空集合のときのtからのコスト')
@@ -148,17 +147,17 @@ class Dspi:
 
         # |S|==bの各Sについて, Tの辺を含むか判定し, 含む場合はGを定義してダイクストラを行う.
         for S in c:
-            self.G_reverse = [[] for i in range(self.n)]
+            G_reverse = [[] for i in range(self.n)]
             flag = False
             for j in tuple_A:
                 if j in S:
                     if (j[0], j[1]) in T: # Tに含まれているかどうかの判定
                         flag = True
-                    self.G_reverse[j[1]].append((j[0], j[2] + j[3]))
+                    G_reverse[j[1]].append((j[0], j[2] + j[3]))
                 else:
-                    self.G_reverse[j[1]].append((j[0], j[2]))
+                    G_reverse[j[1]].append((j[0], j[2]))
             if flag:
-                prev, list_z_star_S = self.dijkstra(self.n - 1, self.n, self.G_reverse)
+                prev, list_z_star_S = self.dijkstra(self.n - 1, self.n, G_reverse)
                 # print('S, z_star_S, prev')
                 # print(S, list_z_star_S, prev)
                 z_star[S] = list_z_star_S
