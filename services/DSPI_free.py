@@ -3,9 +3,9 @@ from collections import defaultdict
 import itertools
 import copy
 
-import networkx as nx
+# import networkx as nx
 
-import my_modules
+from . import my_modules
 
 # import my_networkx as my_nx
 

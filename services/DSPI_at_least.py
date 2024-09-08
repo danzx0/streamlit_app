@@ -3,9 +3,9 @@ from collections import defaultdict
 import itertools
 import copy
 
-import networkx as nx
+# import networkx as nx
 
-import my_modules
+from . import my_modules
 
 def get_DSPI_at_least(input_list):
     INF = 10 ** 9
