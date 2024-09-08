@@ -6,7 +6,7 @@ import copy
 
 import networkx as nx
 
-import my_networkx as my_nx
+# import my_networkx as my_nx
 
 # リストからタプルへ変換 O(NlogN)
 def list_to_tuple(x):
@@ -17,8 +17,8 @@ def tuple_to_list(x):
     return list(tuple_to_list(item) if isinstance(item, tuple) else item for item in x)
 
 # ダイクストラ法 O(N+MlogN)
-INF = 10 ** 9
 def dijkstra(s, n):
+    INF = 10 ** 9
     dist = [INF] * n
     prev = [-1] * n
     hq = [(0, s)]

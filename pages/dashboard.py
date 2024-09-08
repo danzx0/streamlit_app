@@ -3,8 +3,7 @@ import matplotlib.pyplot as plt
 
 import networkx as nx
 
-from services import DSPI_free
-from services import my_networkx as my_nx
+from services import DSPI_free, my_networkx as my_nx
 
 def graph_drawing(input_list, z_star, next_z_star, tuple_Arcs, tuple_A):
     now_node = 0
