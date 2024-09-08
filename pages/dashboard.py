@@ -3,7 +3,7 @@ import matplotlib.pyplot as plt
 
 import networkx as nx
 
-from services import DSPI_free, DSPI_at_most, DSPI_at_least, my_networkx as my_nx
+from services import DSPI_free, DSPI_at_most, DSPI_at_least, DSPI_exactly, my_networkx as my_nx
 
 def graph_drawing_cost_increase(input_list, z_star, next_z_star, tuple_Arcs, tuple_A):
     now_node = 0
@@ -410,13 +410,14 @@ def display():
                 z_star, next_z_star, tuple_Arcs, tuple_A = DSPI_at_least.get_DSPI_at_least(input_list)
                 graph_drawing_cost_increase(input_list, z_star, next_z_star, tuple_Arcs, tuple_A)
             else:
-
+                z_star, next_z_star, tuple_Arcs, tuple_A = DSPI_exactly.get_DSPI_exactly(input_list)
+                graph_drawing_cost_increase(input_list, z_star, next_z_star, tuple_Arcs, tuple_A)
         else:
             if option_constraints == 'free':
-
+                '作成中'
             elif option_constraints == 'at most':
-            
+                '作成中'
             elif option_constraints == 'at least':
-
+                '作成中'
             else:
-
+                '作成中'
