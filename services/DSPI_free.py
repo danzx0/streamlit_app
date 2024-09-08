@@ -110,7 +110,7 @@ def get_DSPI_free(input_list):
     list_Arcs.sort()
     tuple_A = list_to_tuple(list_A)
     tuple_Arcs = list_to_tuple(list_Arcs)
-
+    G_reverse
     # print('n, m, s, t, budget')
     # print(n, m, s, t, budget)
     # print('G')
