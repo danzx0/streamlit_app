@@ -18,7 +18,7 @@ def tuple_to_list(x):
     return list(tuple_to_list(item) if isinstance(item, tuple) else item for item in x)
 
 # ダイクストラ法 O(N+MlogN)
-def dijkstra(s, n, INF, G_reverse):
+def dijkstra(s, n, INF, G_reversed):
     dist = [INF] * n
     prev = [-1] * n
     hq = [(0, s)]
@@ -29,7 +29,7 @@ def dijkstra(s, n, INF, G_reverse):
         if visited[i]:
             continue
         visited[i] = True
-        for j, k in G_reverse[i]:
+        for j, k in G_reversed[i]:
             if not visited[j] and dist[i] + k < dist[j]:
                 dist[j] = dist[i] + k
                 prev[j] = i
@@ -52,7 +52,7 @@ def get_T(n, prev):
 # グラフ(隣接リスト)[始点, 終点, コスト, 増加分]
 # G = [[[, , , ], [, , , ]], [[, , , ], [, , , ]], ..., []]
 # 逆向きのグラフ(隣接リスト)(終点, コスト)
-# G_reverse = [[], [(, ), (, )], ..., [(, )]]
+# G_reversed = [[], [(, ), (, )], ..., [(, )]]
 # アークの集合(始点, 終点, コスト, 増加分)
 # A = ((, , , ), (, , , ), ..., (, , , ))
 # アークの集合(始点, 終点)
@@ -65,7 +65,7 @@ def get_T(n, prev):
 # # グラフ(隣接リスト)[始点, 終点, コスト, 増加分]
 # G = [[[0, 1, 2, 2], [0, 2, 6, 2]], [[1, 2, 3, 4], [1, 3, 1, 2], [1, 4, 4, 8]], [[2, 1, 4, 2], [2, 4, 2, 4]], [[3, 1, 2, 4], [3, 4, 4, 4]], []]
 # # 逆向きのグラフ(隣接リスト)(終点, コスト)
-# G_reverse = [[], [(0, 2), (2, 4), (3, 2)], [(0, 6), (1, 3)], [(1, 1)], [(1, 4), (2, 2), (3, 4)]]
+# G_reversed = [[], [(0, 2), (2, 4), (3, 2)], [(0, 6), (1, 3)], [(1, 1)], [(1, 4), (2, 2), (3, 4)]]
 # # アークの集合(始点, 終点, コスト, 増加分)
 # A = ((0, 1, 2, 2), (0, 2, 6, 2), (1, 2, 3, 4), (1, 3, 1, 2), (1, 4, 4, 8), (2, 1, 4, 2), (2, 4, 2, 4), (3, 1, 2, 4), (3, 4, 4, 4))
 # # アークの集合(始点, 終点)
@@ -78,7 +78,7 @@ def get_T(n, prev):
 # # グラフ(隣接リスト)[始点, 終点, コスト, 増加分]
 # G = [[[0, 1, 1, 2], [0, 2, 1, 2]], [[1, 4, 1, 10]], [[2, 3, 1, 2], [2, 4, 3, 1]], [[3, 4, 1, 10]], []]
 # # 逆向きのグラフ(隣接リスト)(終点, コスト)
-# G_reverse = [[], [(0, 1)], [(0, 1)], [(2, 1)], [(1, 1), (2, 3), (3, 1)]]
+# G_reversed = [[], [(0, 1)], [(0, 1)], [(2, 1)], [(1, 1), (2, 3), (3, 1)]]
 # # アークの集合(始点, 終点, コスト, 増加分)
 # A = ((0, 1, 1, 2), (0, 2, 1, 2), (1, 4, 1, 10), (2, 3, 1, 2), (2, 4, 3, 1), (3, 4, 1, 10))
 # # アークの集合(始点, 終点)
@@ -89,8 +89,8 @@ def get_DSPI_free(input_list):
     # graph = nx.DiGraph()
     # edge_list = []
     G = [[] for i in range(n)]
-    global G_reverse
-    G_reverse = [[] for i in range(n)]
+    global G_reversed
+    G_reversed = [[] for i in range(n)]
     # A, Arcs = (), ()
     list_A, list_Arcs = [], []
 
@@ -98,7 +98,7 @@ def get_DSPI_free(input_list):
         a, b, w, p = input_list[i*4+5], input_list[i*4+6], input_list[i*4+7], input_list[i*4+8]
         # edge_list.append((a, b, {'weight':w, 'plus':p}))
         G[a].append([a, b, w, p])
-        G_reverse[b].append([a, w])
+        G_reversed[b].append([a, w])
         # A += ((a, b, w, p), )
         # Arcs += ((a, b), )
         list_A.append((a, b, w, p))
@@ -106,7 +106,7 @@ def get_DSPI_free(input_list):
 
     for i in range(n):
         G[i].sort()
-        G_reverse[i].sort()
+        G_reversed[i].sort()
     list_A.sort()
     list_Arcs.sort()
     tuple_A = list_to_tuple(list_A)
@@ -115,8 +115,8 @@ def get_DSPI_free(input_list):
     # print(n, m, s, t, budget)
     # print('G')
     # print(G)
-    # print('G_reverse')
-    # print(G_reverse)
+    # print('G_reversed')
+    # print(G_reversed)
     # print('tuple_A')
     # print(tuple_A)
     # print('tuple_Arcs')
@@ -130,7 +130,7 @@ def get_DSPI_free(input_list):
     input_list
 
     # 何も阻止されていない場合で逆向きのダイクストラを行い, 前にいた頂点のリストとコストを出力
-    prev, d = dijkstra(n - 1, n, G_reverse)
+    prev, d = dijkstra(n - 1, n, G_reversed)
     # print('Sが空集合のときのprev')
     # print(prev)
     # print('Sが空集合のときのtからのコスト')
@@ -148,17 +148,17 @@ def get_DSPI_free(input_list):
 
     # |S|==bの各Sについて, Tの辺を含むか判定し, 含む場合はGを定義してダイクストラを行う.
     for S in c:
-        G_reverse = [[] for i in range(n)]
+        G_reversed = [[] for i in range(n)]
         flag = False
         for j in tuple_A:
             if j in S:
                 if (j[0], j[1]) in T: # Tに含まれているかどうかの判定
                     flag = True
-                G_reverse[j[1]].append((j[0], j[2] + j[3]))
+                G_reversed[j[1]].append((j[0], j[2] + j[3]))
             else:
-                G_reverse[j[1]].append((j[0], j[2]))
+                G_reversed[j[1]].append((j[0], j[2]))
         if flag:
-            prev, list_z_star_S = dijkstra(n - 1, n, G_reverse)
+            prev, list_z_star_S = dijkstra(n - 1, n, G_reversed)
             # print('S, z_star_S, prev')
             # print(S, list_z_star_S, prev)
             z_star[S] = list_z_star_S
