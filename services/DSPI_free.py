@@ -127,6 +127,7 @@ class Dspi:
         z_bar = defaultdict(list)
         next_z_star = defaultdict(list)
         next_z_bar = defaultdict(list)
+        input_list
 
         # 何も阻止されていない場合で逆向きのダイクストラを行い, 前にいた頂点のリストとコストを出力
         prev, d = self.dijkstra(self.n - 1, self.n, G_reverse)
