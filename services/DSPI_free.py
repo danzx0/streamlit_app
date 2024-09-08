@@ -1,4 +1,3 @@
-import matplotlib.pyplot as plt
 from heapq import heappush, heappop
 from collections import defaultdict
 import itertools
@@ -6,45 +5,46 @@ import copy
 
 import networkx as nx
 
+import my_modules
+
 # import my_networkx as my_nx
 
-# INF = 10 ** 9
-# リストからタプルへ変換 O(NlogN)
-def list_to_tuple(x):
-    return tuple(list_to_tuple(item) if isinstance(item, list) else item for item in x)
+# # リストからタプルへ変換 O(NlogN)
+# def list_to_tuple(x):
+#     return tuple(list_to_tuple(item) if isinstance(item, list) else item for item in x)
 
-# タプルからリストへ変換 O(NlogN)
-def tuple_to_list(x):
-    return list(tuple_to_list(item) if isinstance(item, tuple) else item for item in x)
+# # タプルからリストへ変換 O(NlogN)
+# def tuple_to_list(x):
+#     return list(tuple_to_list(item) if isinstance(item, tuple) else item for item in x)
 
-# ダイクストラ法 O(N+MlogN)
-def dijkstra(s, n, INF, G_rev):
-    dist = [INF] * n
-    prev = [-1] * n
-    hq = [(0, s)]
-    dist[s] = 0
-    visited = [False] * n
-    while hq:
-        i = heappop(hq)[1]
-        if visited[i]:
-            continue
-        visited[i] = True
-        for j, k in G_rev[i]:
-            if not visited[j] and dist[i] + k < dist[j]:
-                dist[j] = dist[i] + k
-                prev[j] = i
-                heappush(hq, (dist[j], j))
-    return prev, dist
+# # ダイクストラ法 O(N+MlogN)
+# def dijkstra(s, n, INF, G_rev):
+#     dist = [INF] * n
+#     prev = [-1] * n
+#     hq = [(0, s)]
+#     dist[s] = 0
+#     visited = [False] * n
+#     while hq:
+#         i = heappop(hq)[1]
+#         if visited[i]:
+#             continue
+#         visited[i] = True
+#         for j, k in G_rev[i]:
+#             if not visited[j] and dist[i] + k < dist[j]:
+#                 dist[j] = dist[i] + k
+#                 prev[j] = i
+#                 heappush(hq, (dist[j], j))
+#     return prev, dist
 
-# all-to-t-shortest path tree Tの作成 O(N**2)
-def get_T(n, prev):
-    T = set()
-    for i in range(n - 1):
-        cur = i
-        while cur != -1 and cur != n - 1:
-            T.add((cur, prev[cur]))
-            cur = prev[cur]
-    return T
+# # all-to-t-shortest path tree Tの作成 O(N**2)
+# def get_T(n, prev):
+#     T = set()
+#     for i in range(n - 1):
+#         cur = i
+#         while cur != -1 and cur != n - 1:
+#             T.add((cur, prev[cur]))
+#             cur = prev[cur]
+#     return T
 
 # 入力する必要があるもの
 # ノード数, アーク数, 出発点, 到着点, 阻止の予算
@@ -110,8 +110,8 @@ def get_DSPI_free(input_list):
         G_rev[i].sort()
     list_A.sort()
     list_Arcs.sort()
-    tuple_A = list_to_tuple(list_A)
-    tuple_Arcs = list_to_tuple(list_Arcs)
+    tuple_A = my_modules.list_to_tuple(list_A)
+    tuple_Arcs = my_modules.list_to_tuple(list_Arcs)
     # print('n, m, s, t, budget')
     # print(n, m, s, t, budget)
     # print('G')
@@ -131,14 +131,14 @@ def get_DSPI_free(input_list):
     input_list
 
     # 何も阻止されていない場合で逆向きのダイクストラを行い, 前にいた頂点のリストとコストを出力
-    prev, d = dijkstra(n - 1, n, INF, G_rev)
+    prev, d = my_modules.dijkstra(n - 1, n, INF, G_rev)
     # print('Sが空集合のときのprev')
     # print(prev)
     # print('Sが空集合のときのtからのコスト')
     # print(d)
 
     # 経路を復元して, all-to-t-shortest path tree Tを作成
-    T = get_T(n, prev)
+    T = my_modules.get_T(n, prev)
     # print('T')
     # print(T)
 
@@ -159,7 +159,7 @@ def get_DSPI_free(input_list):
             else:
                 G_rev[j[1]].append((j[0], j[2]))
         if flag:
-            prev, list_z_star_S = dijkstra(n - 1, n, INF, G_rev)
+            prev, list_z_star_S = my_modules.dijkstra(n - 1, n, INF, G_rev)
             # print('S, z_star_S, prev')
             # print(S, list_z_star_S, prev)
             z_star[S] = list_z_star_S
@@ -178,7 +178,7 @@ def get_DSPI_free(input_list):
             z_bar[S] = [0] * n # continueしたものは0が代入される
             next_z_bar[S] = [[(), -1] for i in range(n)]
             next_z_star[S] = [[(), -1] for i in range(n)]
-            list_S = tuple_to_list(S)
+            list_S = my_modules.tuple_to_list(S)
             # print('list_S')
             # print(list_S)
             for i in range(n):
@@ -207,7 +207,7 @@ def get_DSPI_free(input_list):
                         if  len(new_S) > budget:
                             continue
                         new_S.sort()
-                        new_S = list_to_tuple(new_S)
+                        new_S = my_modules.list_to_tuple(new_S)
                         # z_star[new_S]が存在するかの判定
                         if z_star[new_S] == []:
                             # print('含まれないの発見')
@@ -217,7 +217,7 @@ def get_DSPI_free(input_list):
                         # new_min_S = new_S
                         for list_arc in G[i]:
                             # c_tildeの更新
-                            arc = list_to_tuple(list_arc)
+                            arc = my_modules.list_to_tuple(list_arc)
                             if arc in new_S:
                                 c_tilde = arc[2] + arc[3]
                             else:
