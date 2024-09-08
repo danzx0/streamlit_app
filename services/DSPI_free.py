@@ -157,7 +157,7 @@ def get_DSPI_free(input_list):
             else:
                 G_reverse[j[1]].append((j[0], j[2]))
         if flag:
-            prev, list_z_star_S = dijkstra(n-1, n)
+            prev, list_z_star_S = dijkstra(n-1, n, G_reverse)
             # print('S, z_star_S, prev')
             # print(S, list_z_star_S, prev)
             z_star[S] = list_z_star_S
