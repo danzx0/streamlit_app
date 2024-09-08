@@ -199,7 +199,7 @@ def graph_drawing(input_list, z_star, next_z_star, tuple_Arcs, tuple_A):
 def display():
     st.header('Input Graph Data')
     # Warningの非表示
-    st.set_option('deprecation.showPyplotGlobalUse', False)
+    # st.set_option('deprecation.showPyplotGlobalUse', False)
     # 入力の受け取り
     input_list = st.text_input('Graph Data')
     # DSPIの実行とグラフ描画を実行するボタンを表示する
