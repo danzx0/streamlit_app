@@ -17,7 +17,7 @@ def tuple_to_list(x):
     return list(tuple_to_list(item) if isinstance(item, tuple) else item for item in x)
 
 # ダイクストラ法 O(N+MlogN)
-def dijkstra(s, n):
+def dijkstra(s, n, G_reverse):
     INF = 10 ** 9
     dist = [INF] * n
     prev = [-1] * n
@@ -129,7 +129,7 @@ def get_DSPI_free(input_list):
     next_z_bar = defaultdict(list)
 
     # 何も阻止されていない場合で逆向きのダイクストラを行い, 前にいた頂点のリストとコストを出力
-    prev, d = dijkstra(n-1, n)
+    prev, d = dijkstra(n-1, n, G_reverse)
     # print('Sが空集合のときのprev')
     # print(prev)
     # print('Sが空集合のときのtからのコスト')
