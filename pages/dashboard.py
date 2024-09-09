@@ -391,6 +391,8 @@ def display():
     st.header('Input Graph Data')
     if 'input_list' not in st.session_state:
         st.session_state['input_list'] = []
+    if 'input_list_str' not in st.session_state:
+        st.session_state['input_list_str'] = ''
     # Warningの非表示
     # st.set_option('deprecation.showPyplotGlobalUse', False)
     # 入力の受け取り
@@ -404,12 +406,14 @@ def display():
         num_of_budgets = st.slider('budget for interdiction', 0, 4, 2) # min, max, default
         if st.button('Create random arcs'):
             input_list = my_modules.create_random_arcs(num_of_nodes, num_of_arcs, 0, num_of_nodes - 1, num_of_budgets)
+            st.session_state['input_list'] = input_list
             # st.text(input_list)
             for i in range(len(input_list)):
                 input_list_str += str(input_list[i])
                 if i != len(input_list) - 1:
                     input_list_str += ' '
-        input_text = st.text_input('Graph Data', value=input_list_str)
+            st.session_state['input_list_str'] = input_list_str
+        input_text = st.text_input('Graph Data', value=st.session_state['input_list_str'])
         st.session_state['input_list'] = list(map(int, input_text.split()))
 
     # モデル選択
