@@ -489,6 +489,7 @@ def display():
                 if i != len(input_list) - 1:
                     input_list_str += ' '
             st.session_state['input_list_str'] = input_list_str
+            st.session_state['Drawing the graph'] = 'circular'
         input_text = st.text_input('Graph Data', value=st.session_state['input_list_str'])
         st.session_state['input_list'] = list(map(int, input_text.split()))
     st.text(len(st.session_state['input_list_str']))
