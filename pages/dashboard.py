@@ -475,9 +475,9 @@ def display():
             st.session_state['budget'] = num_of_budgets
             st.session_state['input_list'] = st.session_state['input_list'][:4] + [num_of_budgets] + st.session_state['input_list'][5:]
             input_list_str = ''
-            for i in range(len(input_list)):
-                input_list_str += str(input_list[i])
-                if i != len(input_list) - 1:
+            for i in range(len(st.session_state['input_list'])):
+                input_list_str += str(st.session_state['input_list'][i])
+                if i != len(st.session_state['input_list']) - 1:
                     input_list_str += ' '
             st.session_state['input_list_str'] = input_list_str
         if st.button('Create random arcs'):
