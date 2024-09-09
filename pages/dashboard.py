@@ -468,17 +468,22 @@ def display():
         input_text = st.text_input('Graph Data')
         st.session_state['input_list'] = list(map(int, input_text.split()))
     else:
-        input_list_str = ''
         num_of_nodes = st.slider('number of nodes', 2, 20, 5) # min, max, default
         num_of_arcs = st.slider('number of arcs', num_of_nodes-1, num_of_nodes*(num_of_nodes-1) - (num_of_nodes-1), 8) # min, max, default
         num_of_budgets = st.slider('budget for interdiction', 1, 4, 2) # min, max, default
         if st.session_state['budget'] != num_of_budgets:
             st.session_state['budget'] = num_of_budgets
-            st.session_state['input_list_str'] = st.session_state['input_list_str'][:8] + str(num_of_budgets) + st.session_state['input_list_str'][9:]
+            st.session_state['input_list'] = st.session_state['input_list'][:4] + num_of_budgets + st.session_state['input_list'][5:]
+            input_list_str = ''
+            for i in range(len(input_list)):
+                input_list_str += str(input_list[i])
+                if i != len(input_list) - 1:
+                    input_list_str += ' '
+            st.session_state['input_list_str'] = input_list_str
         if st.button('Create random arcs'):
             input_list = my_modules.create_random_arcs(num_of_nodes, num_of_arcs, 0, num_of_nodes - 1, num_of_budgets)
             st.session_state['input_list'] = input_list
-            # st.text(input_list)
+            input_list_str = ''
             for i in range(len(input_list)):
                 input_list_str += str(input_list[i])
                 if i != len(input_list) - 1:
