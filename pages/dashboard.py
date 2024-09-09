@@ -490,8 +490,6 @@ def display():
         st.session_state['input_list'] = list(map(int, input_text.split()))
     else:
         st.session_state['input_list'] = []
-        st.session_state['input_list_str'] = ''
-        st.session_state['budget'] = 2
         num_of_nodes = st.slider('number of nodes', 2, 20, 5) # min, max, default
         num_of_arcs = st.slider('number of arcs', num_of_nodes-1, num_of_nodes*(num_of_nodes-1) - (num_of_nodes-1), 8) # min, max, default
         num_of_budgets = st.slider('budget for interdiction', 1, 4, 2) # min, max, default
