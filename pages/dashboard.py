@@ -472,7 +472,6 @@ def display():
         num_of_budgets = st.slider('budget for interdiction', 1, 4, 2) # min, max, default
         if st.session_state['budget'] != num_of_budgets:
             st.session_state['budget'] = num_of_budgets
-            st.session_state['input_list'][4] = num_of_budgets
             st.session_state['input_list_str'] = st.session_state['input_list_str'][:8] + str(num_of_budgets) + st.session_state['input_list_str'][9:]
         if st.button('Create random arcs'):
             input_list = my_modules.create_random_arcs(num_of_nodes, num_of_arcs, 0, num_of_nodes - 1, num_of_budgets)
