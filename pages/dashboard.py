@@ -486,7 +486,7 @@ def display():
             st.session_state['input_list_str'] = input_list_str
         input_text = st.text_input('Graph Data', value=st.session_state['input_list_str'])
         st.session_state['input_list'] = list(map(int, input_text.split()))
-
+    st.text(len(st.session_state['input_list_str']))
     # モデル選択
     option_type = st.selectbox('Select the type of Interdiction', ['Cost increase', 'Remove arcs'])
     option_constraints = st.selectbox('Select constraint', ['free (Interdict any number of arcs at a time)', 'at most (Interdict up to one at a time)', 'at least (More than 1 Interdict at a time)', 'exactly (Interdict 1 at a time)'])
