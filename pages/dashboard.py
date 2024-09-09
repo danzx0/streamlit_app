@@ -473,7 +473,7 @@ def display():
         num_of_budgets = st.slider('budget for interdiction', 1, 4, 2) # min, max, default
         if st.session_state['budget'] != num_of_budgets:
             st.session_state['budget'] = num_of_budgets
-            st.session_state['input_list'] = st.session_state['input_list'][:4] + num_of_budgets + st.session_state['input_list'][5:]
+            st.session_state['input_list'] = st.session_state['input_list'][:4] + [num_of_budgets] + st.session_state['input_list'][5:]
             input_list_str = ''
             for i in range(len(input_list)):
                 input_list_str += str(input_list[i])
