@@ -389,6 +389,7 @@ def graph_drawing_remove_arcs(input_list, z_star, next_z_star, tuple_Arcs, tuple
 
 def display():
     st.header('Input Graph Data')
+    input_list = []
     # Warningの非表示
     # st.set_option('deprecation.showPyplotGlobalUse', False)
     # 入力の受け取り
@@ -409,11 +410,12 @@ def display():
                     input_list_str += ' '
             input_text = st.text_input('Graph Data', value=input_list_str)
             input_list = list(map(int, input_text.split()))
+
     # モデル選択
     option_type = st.selectbox('Select the type of Interdiction', ['Cost increase', 'Remove arcs'])
     option_constraints = st.selectbox('Select constraint', ['free (Interdict any number of arcs at a time)', 'at most (Interdict up to one at a time)', 'at least (More than 1 Interdict at a time)', 'exactly (Interdict 1 at a time)'])
 
-    # DSPIの実行とグラフ描画を実行するボタンを表示する
+    # DSPIの実行とグラフ描画を実行するボタン
     if st.button('Run DSPI'):
         if option_type == 'Cost increase':
             if option_constraints == 'free (Interdict any number of arcs at a time)':
