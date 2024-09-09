@@ -488,7 +488,7 @@ def display():
     # モデル選択
     option_type = st.selectbox('Select the type of Interdiction', ['Cost increase', 'Remove arcs'])
     option_constraints = st.selectbox('Select constraint', ['free (Interdict any number of arcs at a time)', 'at most (Interdict up to one at a time)', 'at least (More than 1 Interdict at a time)', 'exactly (Interdict 1 at a time)'])
-    if len(st.session_state['input_list']) > 0:
+    if st.button('Drawing the graph'):
         if option_type == 'Cost increase':
             graph_drawing_cost_increase_0(st.session_state['input_list'])
         else:
