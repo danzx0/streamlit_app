@@ -486,7 +486,7 @@ def display():
     # 入力の受け取り
     if st.checkbox('input by text'):
         # st.session_state['input_list'] = []
-        input_text = st.text_input('Graph Data')
+        input_text = st.text_input('Graph Data', value=st.session_state['input_list_str'])
         st.session_state['input_list'] = list(map(int, input_text.split()))
     else:
         # st.session_state['input_list'] = []
