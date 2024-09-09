@@ -457,6 +457,8 @@ def display():
         st.session_state['input_list'] = []
     if 'input_list_str' not in st.session_state:
         st.session_state['input_list_str'] = ''
+    if 'budget' not in st.session_state:
+        st.session_state['budget'] = 0
     # Warningの非表示
     # st.set_option('deprecation.showPyplotGlobalUse', False)
     # 入力の受け取り
@@ -468,7 +470,8 @@ def display():
         num_of_nodes = st.slider('number of nodes', 2, 20, 5) # min, max, default
         num_of_arcs = st.slider('number of arcs', num_of_nodes-1, num_of_nodes*(num_of_nodes-1) - (num_of_nodes-1), 8) # min, max, default
         num_of_budgets = st.slider('budget for interdiction', 1, 4, 2) # min, max, default
-        if len(st.session_state['input_list']) > 0:
+        if st.session_state['budget'] != num_of_budgets:
+            st.session_state['budget'] = num_of_budgets
             st.session_state['input_list'][4] = num_of_budgets
             st.session_state['input_list_str'] = st.session_state['input_list_str'][:8] + str(num_of_budgets) + st.session_state['input_list_str'][9:]
         if st.button('Create random arcs'):
