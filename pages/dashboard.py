@@ -492,7 +492,7 @@ def display():
         # st.session_state['input_list'] = []
         num_of_nodes = st.slider('number of nodes', 2, 20, 5) # min, max, default
         num_of_arcs = st.slider('number of arcs', num_of_nodes-1, num_of_nodes*(num_of_nodes-1) - (num_of_nodes-1), num_of_nodes-1) # min, max, default
-        num_of_budgets = st.slider('budget for interdiction', 1, 4, 2) # min, max, default
+        num_of_budgets = st.slider('budget for interdiction', 1, 4, 1) # min, max, default
         if st.session_state['budget'] != num_of_budgets:
             st.session_state['budget'] = num_of_budgets
             st.session_state['input_list'] = st.session_state['input_list'][:4] + [num_of_budgets] + st.session_state['input_list'][5:]
