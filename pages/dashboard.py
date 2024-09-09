@@ -488,7 +488,6 @@ def display():
             graph_drawing_cost_increase_0(st.session_state['input_list'])
         else:
             graph_drawing_remove_arcs_0(st.session_state['input_list'])
-            st.text('作成中')
 
     # DSPIの実行とグラフ描画を実行するボタン
     if st.button('Run DSPI'):
