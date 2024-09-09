@@ -509,8 +509,6 @@ def display():
                 if i != len(input_list) - 1:
                     input_list_str += ' '
             st.session_state['input_list_str'] = input_list_str
-            if st.session_state['graph_layout'] == '':
-                st.session_state['graph_layout'] = 'circular'
         input_text = st.text_input('Graph Data', value=st.session_state['input_list_str'])
         st.session_state['input_list'] = list(map(int, input_text.split()))
     st.text(len(st.session_state['input_list_str']))
@@ -519,7 +517,7 @@ def display():
     option_constraints = st.selectbox('Select constraint', ['free (Interdict any number of arcs at a time)', 'at most (Interdict up to one at a time)', 'at least (More than 1 Interdict at a time)', 'exactly (Interdict 1 at a time)'])
     option_graph_layout = st.selectbox('Select graph layout', ['circular', 'kamada_kawai', 'random'])
     st.session_state['graph_layout'] = option_graph_layout
-    if st.session_state['graph_layout'] != '':
+    if len(st.session_state['input_list_str']) != '':
         if option_type == 'Cost increase':
             graph_drawing_cost_increase_0(st.session_state['input_list'], st.session_state['graph_layout'])
         else:
