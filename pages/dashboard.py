@@ -491,7 +491,7 @@ def display():
     else:
         # st.session_state['input_list'] = []
         num_of_nodes = st.slider('number of nodes', 2, 20, 5) # min, max, default
-        num_of_arcs = st.slider('number of arcs', num_of_nodes-1, num_of_nodes*(num_of_nodes-1) - (num_of_nodes-1), 8) # min, max, default
+        num_of_arcs = st.slider('number of arcs', num_of_nodes-1, num_of_nodes*(num_of_nodes-1) - (num_of_nodes-1), num_of_nodes-1) # min, max, default
         num_of_budgets = st.slider('budget for interdiction', 1, 4, 2) # min, max, default
         if st.session_state['budget'] != num_of_budgets:
             st.session_state['budget'] = num_of_budgets
@@ -513,8 +513,6 @@ def display():
             st.session_state['input_list_str'] = input_list_str
         input_text = st.text_input('Graph Data', value=st.session_state['input_list_str'])
         st.session_state['input_list'] = list(map(int, input_text.split()))
-    st.text(len(st.session_state['input_list_str']))
-    st.text(st.session_state['input_list_str'])
     # モデル選択
     option_type = st.selectbox('Select the type of Interdiction', ['Cost increase', 'Remove arcs'])
     option_constraints = st.selectbox('Select constraint', ['free (Interdict any number of arcs at a time)', 'at most (Interdict up to one at a time)', 'at least (More than 1 Interdict at a time)', 'exactly (Interdict 1 at a time)'])
