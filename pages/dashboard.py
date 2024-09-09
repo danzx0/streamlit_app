@@ -414,10 +414,10 @@ def display():
                 graph_drawing_cost_increase(input_list, z_star, next_z_star, tuple_Arcs, tuple_A)
         else:
             if option_constraints == 'free (Interdict any number of arcs at a time)':
-                '作成中'
+                st.text('作成中')
             elif option_constraints == 'at most (Interdict up to one at a time)':
-                '作成中'
+                st.text('作成中')
             elif option_constraints == 'at least (More than 1 Interdict at a time)':
-                '作成中'
+                st.text('作成中')
             else:
-                '作成中'
+                st.text('作成中')
