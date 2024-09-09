@@ -401,7 +401,7 @@ def display():
         num_of_budgets = st.slider('budget for interdiction', 0, 4, 2) # min, max, default
         if st.button('Create random arcs'):
             input_list = my_modules.create_random_arcs(num_of_nodes, num_of_arcs, 0, num_of_nodes - 1, num_of_budgets)
-            input_text = st.text_input('Graph Data', value=str(input_list))
+            input_text = st.text_input('Graph Data', value=str(*input_list))
             input_list = list(map(int, input_text.split()))
     # モデル選択
     option_type = st.selectbox('Select the type of Interdiction', ['Cost increase', 'Remove arcs'])
