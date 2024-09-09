@@ -401,6 +401,7 @@ def display():
         num_of_budgets = st.slider('budget for interdiction', 0, 4, 2) # min, max, default
         if st.button('Create random arcs'):
             input_list = my_modules.create_random_arcs(num_of_nodes, num_of_arcs, 0, num_of_nodes - 1, num_of_budgets)
+            st.text(input_list)
             # input_list_str = ''
             # for i in range(len(input_list)):
             #     input_list_str += str(input_list[i])
