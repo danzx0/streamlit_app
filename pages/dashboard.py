@@ -5,6 +5,38 @@ import networkx as nx
 
 from services import DSPI_free, DSPI_at_most, DSPI_at_least, DSPI_exactly, my_modules, my_networkx as my_nx
 
+def graph_drawing_cost_increase_0(input_list):
+    # グラフの描画準備
+    graph = nx.DiGraph()
+    edge_list = []
+    n, m = input_list[0], input_list[1]
+    for i in range(m):
+        a, b, w, p = input_list[i*4+5], input_list[i*4+6], input_list[i*4+7], input_list[i*4+8]
+        edge_list.append((a, b, {'weight':w, 'plus':p}))
+
+    graph.add_edges_from(edge_list)
+    pos  = nx.kamada_kawai_layout(graph)
+    for i in range(n):
+        pos[i][0] = pos[i][0] * (-1)
+    fig, ax = plt.subplots()
+    nx.draw_networkx_nodes(graph, pos, ax = ax)
+    nx.draw_networkx_labels(graph, pos, ax = ax)
+
+    curved_edges = [edge for edge in graph.edges() if reversed(edge) in graph.edges()]
+    straight_edges = list(set(graph.edges()) - set(curved_edges))
+    nx.draw_networkx_edges(graph, pos, ax=ax, edgelist=straight_edges)
+    arc_rad = 0.29
+    nx.draw_networkx_edges(graph, pos, ax=ax, edgelist=curved_edges, connectionstyle=f'arc3, rad = {arc_rad}')
+
+    edge_weights = nx.get_edge_attributes(graph,'weight')
+    edge_plus = nx.get_edge_attributes(graph,'plus')
+    curved_edge_labels = {edge: str(edge_weights[edge]) + ' (' +  str(edge_plus[edge]) + ')' for edge in curved_edges}
+    straight_edge_labels = {edge: str(edge_weights[edge]) + ' (' + str(edge_plus[edge]) + ')' for edge in straight_edges}
+    my_nx.my_draw_networkx_edge_labels(graph, pos, ax=ax, edge_labels=curved_edge_labels, rotate=False, rad = arc_rad)
+    nx.draw_networkx_edge_labels(graph, pos, ax=ax, edge_labels=straight_edge_labels, rotate=False)
+    # plt.show()
+    st.pyplot(fig)
+
 def graph_drawing_cost_increase(input_list, z_star, next_z_star, tuple_Arcs, tuple_A):
     now_node = 0
     now_S = tuple()
@@ -38,7 +70,7 @@ def graph_drawing_cost_increase(input_list, z_star, next_z_star, tuple_Arcs, tup
     my_nx.my_draw_networkx_edge_labels(graph, pos, ax=ax, edge_labels=curved_edge_labels, rotate=False, rad = arc_rad)
     nx.draw_networkx_edge_labels(graph, pos, ax=ax, edge_labels=straight_edge_labels, rotate=False)
     # plt.show()
-    st.pyplot(fig)
+    # st.pyplot(fig)
     interdicted_curved_edges = []
     interdicted_straight_edges = []
     passed_curved_edges = []
@@ -402,7 +434,7 @@ def display():
     else:
         input_list_str = ''
         num_of_nodes = st.slider('number of nodes', 2, 20, 5) # min, max, default
-        num_of_arcs = st.slider('number of arcs', num_of_nodes-1, num_of_nodes*(num_of_nodes-1) - (num_of_nodes-1), num_of_nodes-1) # min, max, default
+        num_of_arcs = st.slider('number of arcs', num_of_nodes-1, num_of_nodes*(num_of_nodes-1) - (num_of_nodes-1), 8) # min, max, default
         num_of_budgets = st.slider('budget for interdiction', 0, 4, 2) # min, max, default
         if st.button('Create random arcs'):
             input_list = my_modules.create_random_arcs(num_of_nodes, num_of_arcs, 0, num_of_nodes - 1, num_of_budgets)
@@ -419,6 +451,11 @@ def display():
     # モデル選択
     option_type = st.selectbox('Select the type of Interdiction', ['Cost increase', 'Remove arcs'])
     option_constraints = st.selectbox('Select constraint', ['free (Interdict any number of arcs at a time)', 'at most (Interdict up to one at a time)', 'at least (More than 1 Interdict at a time)', 'exactly (Interdict 1 at a time)'])
+    if option_type == 'Cost increase':
+        graph_drawing_cost_increase_0(st.session_state['input_list'])
+    else:
+        # graph_drawing_remove_arcs()
+        st.text('作成中')
 
     # DSPIの実行とグラフ描画を実行するボタン
     if st.button('Run DSPI'):
