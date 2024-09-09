@@ -459,6 +459,8 @@ def display():
         st.session_state['input_list_str'] = ''
     if 'budget' not in st.session_state:
         st.session_state['budget'] = 2
+    if 'Drawing the graph' not in st.session_state:
+        st.session_state['Drawing the graph'] = ''
     # Warningの非表示
     # st.set_option('deprecation.showPyplotGlobalUse', False)
     # 入力の受け取り
@@ -489,6 +491,8 @@ def display():
     option_type = st.selectbox('Select the type of Interdiction', ['Cost increase', 'Remove arcs'])
     option_constraints = st.selectbox('Select constraint', ['free (Interdict any number of arcs at a time)', 'at most (Interdict up to one at a time)', 'at least (More than 1 Interdict at a time)', 'exactly (Interdict 1 at a time)'])
     if st.button('Drawing the graph'):
+        st.session_state['Drawing the graph'] = 'circular'
+    if st.session_state['Drawing the graph'] != '':
         if option_type == 'Cost increase':
             graph_drawing_cost_increase_0(st.session_state['input_list'])
         else:
