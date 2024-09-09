@@ -228,7 +228,7 @@ def graph_drawing_cost_increase(input_list, z_star, next_z_star, tuple_Arcs, tup
     # plt.show()
     st.pyplot(fig)
 
-def graph_drawing_cost_increase_0(input_list):
+def graph_drawing_remove_arcs_0(input_list):
     # グラフの描画準備
     graph = nx.DiGraph()
     edge_list = []
