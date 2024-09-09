@@ -5,7 +5,7 @@ import networkx as nx
 
 from services import DSPI_free, DSPI_at_most, DSPI_at_least, DSPI_exactly, my_modules, my_networkx as my_nx
 
-def graph_drawing_cost_increase_0(input_list):
+def graph_drawing_cost_increase_0(input_list, graph_layout):
     # グラフの描画準備
     graph = nx.DiGraph()
     edge_list = []
@@ -15,7 +15,12 @@ def graph_drawing_cost_increase_0(input_list):
         edge_list.append((a, b, {'weight':w, 'plus':p}))
 
     graph.add_edges_from(edge_list)
-    pos  = nx.circular_layout(graph)
+    if graph_layout == 'circular':
+        pos  = nx.circular_layout(graph)
+    elif graph_layout == 'kamada_kawai':
+        pos  = nx.kamada_kawai_layout(graph)
+    else:
+        pos  = nx.random_layout(graph)
     for i in range(n):
         pos[i][0] = pos[i][0] * (-1)
     fig, ax = plt.subplots()
@@ -37,7 +42,7 @@ def graph_drawing_cost_increase_0(input_list):
     # plt.show()
     st.pyplot(fig)
 
-def graph_drawing_cost_increase(input_list, z_star, next_z_star, tuple_Arcs, tuple_A):
+def graph_drawing_cost_increase(input_list, z_star, next_z_star, tuple_Arcs, tuple_A, graph_layout):
     now_node = 0
     now_S = tuple()
     now_cost = 0
@@ -50,7 +55,12 @@ def graph_drawing_cost_increase(input_list, z_star, next_z_star, tuple_Arcs, tup
         edge_list.append((a, b, {'weight':w, 'plus':p}))
 
     graph.add_edges_from(edge_list)
-    pos  = nx.circular_layout(graph)
+    if graph_layout == 'circular':
+        pos  = nx.circular_layout(graph)
+    elif graph_layout == 'kamada_kawai':
+        pos  = nx.kamada_kawai_layout(graph)
+    else:
+        pos  = nx.random_layout(graph)
     for i in range(n):
         pos[i][0] = pos[i][0] * (-1)
     fig, ax = plt.subplots()
@@ -228,7 +238,7 @@ def graph_drawing_cost_increase(input_list, z_star, next_z_star, tuple_Arcs, tup
     # plt.show()
     st.pyplot(fig)
 
-def graph_drawing_remove_arcs_0(input_list):
+def graph_drawing_remove_arcs_0(input_list, graph_layout):
     # グラフの描画準備
     graph = nx.DiGraph()
     edge_list = []
@@ -238,7 +248,12 @@ def graph_drawing_remove_arcs_0(input_list):
         edge_list.append((a, b, {'weight':w, 'plus':p}))
 
     graph.add_edges_from(edge_list)
-    pos  = nx.kamada_kawai_layout(graph)
+    if graph_layout == 'circular':
+        pos  = nx.circular_layout(graph)
+    elif graph_layout == 'kamada_kawai':
+        pos  = nx.kamada_kawai_layout(graph)
+    else:
+        pos  = nx.random_layout(graph)
     for i in range(n):
         pos[i][0] = pos[i][0] * (-1)
     fig, ax = plt.subplots()
@@ -260,7 +275,7 @@ def graph_drawing_remove_arcs_0(input_list):
     # plt.show()
     st.pyplot(fig)
 
-def graph_drawing_remove_arcs(input_list, z_star, next_z_star, tuple_Arcs, tuple_A):
+def graph_drawing_remove_arcs(input_list, z_star, next_z_star, tuple_Arcs, tuple_A, graph_layout):
     now_node = 0
     now_S = tuple()
     now_cost = 0
@@ -273,7 +288,12 @@ def graph_drawing_remove_arcs(input_list, z_star, next_z_star, tuple_Arcs, tuple
         edge_list.append((a, b, {'weight':w, 'plus':p}))
 
     graph.add_edges_from(edge_list)
-    pos  = nx.kamada_kawai_layout(graph)
+    if graph_layout == 'circular':
+        pos  = nx.circular_layout(graph)
+    elif graph_layout == 'kamada_kawai':
+        pos  = nx.kamada_kawai_layout(graph)
+    else:
+        pos  = nx.random_layout(graph)
     for i in range(n):
         pos[i][0] = pos[i][0] * (-1)
     fig, ax = plt.subplots()
@@ -459,8 +479,8 @@ def display():
         st.session_state['input_list_str'] = ''
     if 'budget' not in st.session_state:
         st.session_state['budget'] = 2
-    if 'Drawing the graph' not in st.session_state:
-        st.session_state['Drawing the graph'] = ''
+    if 'graph_layout' not in st.session_state:
+        st.session_state['graph_layout'] = ''
     # Warningの非表示
     # st.set_option('deprecation.showPyplotGlobalUse', False)
     # 入力の受け取り
@@ -489,36 +509,37 @@ def display():
                 if i != len(input_list) - 1:
                     input_list_str += ' '
             st.session_state['input_list_str'] = input_list_str
-            if st.session_state['Drawing the graph'] == '':
-                st.session_state['Drawing the graph'] = 'circular'
+            if st.session_state['graph_layout'] == '':
+                st.session_state['graph_layout'] = 'circular'
         input_text = st.text_input('Graph Data', value=st.session_state['input_list_str'])
         st.session_state['input_list'] = list(map(int, input_text.split()))
     st.text(len(st.session_state['input_list_str']))
     # モデル選択
     option_type = st.selectbox('Select the type of Interdiction', ['Cost increase', 'Remove arcs'])
     option_constraints = st.selectbox('Select constraint', ['free (Interdict any number of arcs at a time)', 'at most (Interdict up to one at a time)', 'at least (More than 1 Interdict at a time)', 'exactly (Interdict 1 at a time)'])
-    option_graph_layout = st.selectbox('Select graph layout', ['kamada_kawai', 'circular', 'random'])
-    if st.session_state['Drawing the graph'] != '':
+    option_graph_layout = st.selectbox('Select graph layout', ['circular', 'kamada_kawai', 'random'])
+    st.session_state['graph_layout'] = option_graph_layout
+    if st.session_state['graph_layout'] != '':
         if option_type == 'Cost increase':
-            graph_drawing_cost_increase_0(st.session_state['input_list'])
+            graph_drawing_cost_increase_0(st.session_state['input_list'], st.session_state['Drawing the graph'])
         else:
-            graph_drawing_remove_arcs_0(st.session_state['input_list'])
+            graph_drawing_remove_arcs_0(st.session_state['input_list'], st.session_state['Drawing the graph'])
 
     # DSPIの実行とグラフ描画を実行するボタン
     if st.button('Run DSPI'):
         if option_type == 'Cost increase':
             if option_constraints == 'free (Interdict any number of arcs at a time)':
                 z_star, next_z_star, tuple_Arcs, tuple_A = DSPI_free.get_DSPI_free(st.session_state['input_list'])
-                graph_drawing_cost_increase(st.session_state['input_list'], z_star, next_z_star, tuple_Arcs, tuple_A)
+                graph_drawing_cost_increase(st.session_state['input_list'], z_star, next_z_star, tuple_Arcs, tuple_A, st.session_state['graph_layout'])
             elif option_constraints == 'at most (Interdict up to one at a time)':
                 z_star, next_z_star, tuple_Arcs, tuple_A = DSPI_at_most.get_DSPI_at_most(st.session_state['input_list'])
-                graph_drawing_cost_increase(st.session_state['input_list'], z_star, next_z_star, tuple_Arcs, tuple_A)
+                graph_drawing_cost_increase(st.session_state['input_list'], z_star, next_z_star, tuple_Arcs, tuple_A, st.session_state['graph_layout'])
             elif option_constraints == 'at least (More than 1 Interdict at a time)':
                 z_star, next_z_star, tuple_Arcs, tuple_A = DSPI_at_least.get_DSPI_at_least(st.session_state['input_list'])
-                graph_drawing_cost_increase(st.session_state['input_list'], z_star, next_z_star, tuple_Arcs, tuple_A)
+                graph_drawing_cost_increase(st.session_state['input_list'], z_star, next_z_star, tuple_Arcs, tuple_A, st.session_state['graph_layout'])
             else:
                 z_star, next_z_star, tuple_Arcs, tuple_A = DSPI_exactly.get_DSPI_exactly(st.session_state['input_list'])
-                graph_drawing_cost_increase(st.session_state['input_list'], z_star, next_z_star, tuple_Arcs, tuple_A)
+                graph_drawing_cost_increase(st.session_state['input_list'], z_star, next_z_star, tuple_Arcs, tuple_A, st.session_state['graph_layout'])
         else:
             if option_constraints == 'free (Interdict any number of arcs at a time)':
                 st.text('作成中')
