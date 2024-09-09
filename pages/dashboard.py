@@ -489,15 +489,15 @@ def display():
                 if i != len(input_list) - 1:
                     input_list_str += ' '
             st.session_state['input_list_str'] = input_list_str
-            st.session_state['Drawing the graph'] = 'circular'
+            if st.session_state['Drawing the graph'] == '':
+                st.session_state['Drawing the graph'] = 'circular'
         input_text = st.text_input('Graph Data', value=st.session_state['input_list_str'])
         st.session_state['input_list'] = list(map(int, input_text.split()))
     st.text(len(st.session_state['input_list_str']))
     # モデル選択
     option_type = st.selectbox('Select the type of Interdiction', ['Cost increase', 'Remove arcs'])
     option_constraints = st.selectbox('Select constraint', ['free (Interdict any number of arcs at a time)', 'at most (Interdict up to one at a time)', 'at least (More than 1 Interdict at a time)', 'exactly (Interdict 1 at a time)'])
-    if st.button('Drawing the graph'):
-        st.session_state['Drawing the graph'] = 'circular'
+    option_graph_layout = st.selectbox('Select graph layout', ['kamada_kawai', 'circular', 'random'])
     if st.session_state['Drawing the graph'] != '':
         if option_type == 'Cost increase':
             graph_drawing_cost_increase_0(st.session_state['input_list'])
