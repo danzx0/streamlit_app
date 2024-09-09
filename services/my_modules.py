@@ -21,8 +21,10 @@ def create_random_arcs(n, m, s, t, budget):
     for i in range(n-1):
         y = random.choice(Y)
         x = random.choice(X)
-        w = random.randint(1, 10)
-        p = random.randint(1, 10)
+        # w = random.randint(1, 10)
+        # p = random.randint(1, 10)
+        w = random.randint(5, 10)
+        p = random.randint(5, 10)
         G[x].append([y, w, p])
         G_node[x].append(y)
         Y.append(x)
@@ -47,8 +49,10 @@ def create_random_arcs(n, m, s, t, budget):
         for j in G_node[a]:
             Y.append(j)
         # if not(a == s and b == t) or n == 2:
-        w = random.randint(1, 10)
-        p = random.randint(1, 10)
+        # w = random.randint(1, 10)
+        # p = random.randint(1, 10)
+        w = random.randint(1, 5)
+        p = random.randint(1, 5)
         G[a].append([b, w, p])
         G_node[a].append(b)
         res_Arcs[a] += 1
