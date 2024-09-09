@@ -478,7 +478,7 @@ def display():
     if 'input_list_str' not in st.session_state:
         st.session_state['input_list_str'] = ''
     if 'budget' not in st.session_state:
-        st.session_state['budget'] = 2
+        st.session_state['budget'] = 1
     if 'graph_layout' not in st.session_state:
         st.session_state['graph_layout'] = ''
     # Warningの非表示
