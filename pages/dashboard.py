@@ -3,7 +3,7 @@ import matplotlib.pyplot as plt
 
 import networkx as nx
 
-from services import DSPI_free, DSPI_at_most, DSPI_at_least, DSPI_exactly, my_networkx as my_nx
+from services import DSPI_free, DSPI_at_most, DSPI_at_least, DSPI_exactly, my_modules, my_networkx as my_nx
 
 def graph_drawing_cost_increase(input_list, z_star, next_z_star, tuple_Arcs, tuple_A):
     now_node = 0
@@ -392,8 +392,18 @@ def display():
     # Warningの非表示
     # st.set_option('deprecation.showPyplotGlobalUse', False)
     # 入力の受け取り
-    input_text = st.text_input('Graph Data')
-    input_list = list(map(int, input_text.split()))
+    if st.checkbox('input by text'):
+        input_text = st.text_input('Graph Data')
+        input_list = list(map(int, input_text.split()))
+    else:
+        num_of_nodes = st.slider('number of nodes', 2, 20, 5) # min, max, default
+        num_of_arcs = st.slider('number of arcs', num_of_nodes-1, num_of_nodes*(num_of_nodes-1) - (num_of_nodes-1), num_of_nodes-1) # min, max, default
+        num_of_budgets = st.slider('budget for interdiction', 0, 4, 2) # min, max, default
+        if st.button('Create random arcs'):
+            input_list = my_modules.create_random_arcs(num_of_nodes, num_of_arcs, 0, num_of_nodes - 1, num_of_budgets)
+            input_text = st.text_input('Graph Data', value=str(input_list))
+            input_list = list(map(int, input_text.split()))
+    # モデル選択
     option_type = st.selectbox('Select the type of Interdiction', ['Cost increase', 'Remove arcs'])
     option_constraints = st.selectbox('Select constraint', ['free (Interdict any number of arcs at a time)', 'at most (Interdict up to one at a time)', 'at least (More than 1 Interdict at a time)', 'exactly (Interdict 1 at a time)'])
 
