@@ -15,7 +15,7 @@ def graph_drawing_cost_increase_0(input_list):
         edge_list.append((a, b, {'weight':w, 'plus':p}))
 
     graph.add_edges_from(edge_list)
-    pos  = nx.kamada_kawai_layout(graph)
+    pos  = nx.circular_layout(graph)
     for i in range(n):
         pos[i][0] = pos[i][0] * (-1)
     fig, ax = plt.subplots()
@@ -50,7 +50,7 @@ def graph_drawing_cost_increase(input_list, z_star, next_z_star, tuple_Arcs, tup
         edge_list.append((a, b, {'weight':w, 'plus':p}))
 
     graph.add_edges_from(edge_list)
-    pos  = nx.kamada_kawai_layout(graph)
+    pos  = nx.circular_layout(graph)
     for i in range(n):
         pos[i][0] = pos[i][0] * (-1)
     fig, ax = plt.subplots()
