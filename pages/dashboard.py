@@ -521,9 +521,9 @@ def display():
     st.session_state['graph_layout'] = option_graph_layout
     if st.session_state['graph_layout'] != '':
         if option_type == 'Cost increase':
-            graph_drawing_cost_increase_0(st.session_state['input_list'], st.session_state['Drawing the graph'])
+            graph_drawing_cost_increase_0(st.session_state['input_list'], st.session_state['graph_layout'])
         else:
-            graph_drawing_remove_arcs_0(st.session_state['input_list'], st.session_state['Drawing the graph'])
+            graph_drawing_remove_arcs_0(st.session_state['input_list'], st.session_state['graph_layout'])
 
     # DSPIの実行とグラフ描画を実行するボタン
     if st.button('Run DSPI'):
