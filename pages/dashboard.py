@@ -485,6 +485,8 @@ def display():
     # st.set_option('deprecation.showPyplotGlobalUse', False)
     # 入力の受け取り
     if st.checkbox('input by text'):
+        st.session_state['input_list'] = []
+        st.session_state['input_list_str'] = ''
         input_text = st.text_input('Graph Data')
         st.session_state['input_list'] = list(map(int, input_text.split()))
     else:
