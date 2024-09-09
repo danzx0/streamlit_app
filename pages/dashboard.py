@@ -458,7 +458,7 @@ def display():
     if 'input_list_str' not in st.session_state:
         st.session_state['input_list_str'] = ''
     if 'budget' not in st.session_state:
-        st.session_state['budget'] = 0
+        st.session_state['budget'] = 2
     # Warningの非表示
     # st.set_option('deprecation.showPyplotGlobalUse', False)
     # 入力の受け取り
