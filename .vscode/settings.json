@@ -1,0 +1,20 @@
+{
+    "python.autoComplete.extraPaths": [
+        "/Users/wadashintaro/Desktop/Programming/GitHub/Streamlit_DSPI/dashboard.py",
+        "/Users/wadashintaro/Desktop/Programming/GitHub/Streamlit_DSPI/DSPI_free.py",
+        "/Users/wadashintaro/Desktop/Programming/GitHub/Streamlit_DSPI/DSPI_at_most.py",
+        "/Users/wadashintaro/Desktop/Programming/GitHub/Streamlit_DSPI/DSPI_at_least.py",
+        "/Users/wadashintaro/Desktop/Programming/GitHub/Streamlit_DSPI/DSPI_exactly.py",
+        "/Users/wadashintaro/Desktop/Programming/GitHub/Streamlit_DSPI/my_modules.py",
+        "/Users/wadashintaro/Desktop/Programming/GitHub/Streamlit_DSPI/my_networkx.py",
+    ],
+    "python.analysis.extraPaths": [
+        "/Users/wadashintaro/Desktop/Programming/GitHub/Streamlit_DSPI/dashboard.py",
+        "/Users/wadashintaro/Desktop/Programming/GitHub/Streamlit_DSPI/DSPI_free.py",
+        "/Users/wadashintaro/Desktop/Programming/GitHub/Streamlit_DSPI/DSPI_at_most.py",
+        "/Users/wadashintaro/Desktop/Programming/GitHub/Streamlit_DSPI/DSPI_at_least.py",
+        "/Users/wadashintaro/Desktop/Programming/GitHub/Streamlit_DSPI/DSPI_exactly.py",
+        "/Users/wadashintaro/Desktop/Programming/GitHub/Streamlit_DSPI/my_modules.py",
+        "/Users/wadashintaro/Desktop/Programming/GitHub/Streamlit_DSPI/my_networkx.py",
+    ]
+}

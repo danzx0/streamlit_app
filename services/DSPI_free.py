@@ -1,50 +1,50 @@
-import matplotlib.pyplot as plt
 from heapq import heappush, heappop
 from collections import defaultdict
 import itertools
 import copy
 
-import networkx as nx
+# import networkx as nx
 
-import my_networkx as my_nx
+from . import my_modules
 
-# リストからタプルへ変換 O(NlogN)
-def list_to_tuple(x):
-    return tuple(list_to_tuple(item) if isinstance(item, list) else item for item in x)
+# import my_networkx as my_nx
 
-# タプルからリストへ変換 O(NlogN)
-def tuple_to_list(x):
-    return list(tuple_to_list(item) if isinstance(item, tuple) else item for item in x)
+# # リストからタプルへ変換 O(NlogN)
+# def list_to_tuple(x):
+#     return tuple(list_to_tuple(item) if isinstance(item, list) else item for item in x)
 
-# ダイクストラ法 O(N+MlogN)
-INF = 10 ** 9
-def dijkstra(s, n):
-    dist = [INF] * n
-    prev = [-1] * n
-    hq = [(0, s)]
-    dist[s] = 0
-    visited = [False] * n
-    while hq:
-        i = heappop(hq)[1]
-        if visited[i]:
-            continue
-        visited[i] = True
-        for j, k in G_reverse[i]:
-            if not visited[j] and dist[i] + k < dist[j]:
-                dist[j] = dist[i] + k
-                prev[j] = i
-                heappush(hq, (dist[j], j))
-    return prev, dist
+# # タプルからリストへ変換 O(NlogN)
+# def tuple_to_list(x):
+#     return list(tuple_to_list(item) if isinstance(item, tuple) else item for item in x)
 
-# all-to-t-shortest path tree Tの作成 O(N**2)
-def get_T(prev):
-    T = set()
-    for i in range(n-1):
-        cur = i
-        while cur != -1 and cur != n-1:
-            T.add((cur, prev[cur]))
-            cur = prev[cur]
-    return T
+# # ダイクストラ法 O(N+MlogN)
+# def dijkstra(s, n, INF, G_rev):
+#     dist = [INF] * n
+#     prev = [-1] * n
+#     hq = [(0, s)]
+#     dist[s] = 0
+#     visited = [False] * n
+#     while hq:
+#         i = heappop(hq)[1]
+#         if visited[i]:
+#             continue
+#         visited[i] = True
+#         for j, k in G_rev[i]:
+#             if not visited[j] and dist[i] + k < dist[j]:
+#                 dist[j] = dist[i] + k
+#                 prev[j] = i
+#                 heappush(hq, (dist[j], j))
+#     return prev, dist
+
+# # all-to-t-shortest path tree Tの作成 O(N**2)
+# def get_T(n, prev):
+#     T = set()
+#     for i in range(n - 1):
+#         cur = i
+#         while cur != -1 and cur != n - 1:
+#             T.add((cur, prev[cur]))
+#             cur = prev[cur]
+#     return T
 
 # 入力する必要があるもの
 # ノード数, アーク数, 出発点, 到着点, 阻止の予算
@@ -52,7 +52,7 @@ def get_T(prev):
 # グラフ(隣接リスト)[始点, 終点, コスト, 増加分]
 # G = [[[, , , ], [, , , ]], [[, , , ], [, , , ]], ..., []]
 # 逆向きのグラフ(隣接リスト)(終点, コスト)
-# G_reverse = [[], [(, ), (, )], ..., [(, )]]
+# G_rev = [[], [(, ), (, )], ..., [(, )]]
 # アークの集合(始点, 終点, コスト, 増加分)
 # A = ((, , , ), (, , , ), ..., (, , , ))
 # アークの集合(始点, 終点)
@@ -65,7 +65,7 @@ def get_T(prev):
 # # グラフ(隣接リスト)[始点, 終点, コスト, 増加分]
 # G = [[[0, 1, 2, 2], [0, 2, 6, 2]], [[1, 2, 3, 4], [1, 3, 1, 2], [1, 4, 4, 8]], [[2, 1, 4, 2], [2, 4, 2, 4]], [[3, 1, 2, 4], [3, 4, 4, 4]], []]
 # # 逆向きのグラフ(隣接リスト)(終点, コスト)
-# G_reverse = [[], [(0, 2), (2, 4), (3, 2)], [(0, 6), (1, 3)], [(1, 1)], [(1, 4), (2, 2), (3, 4)]]
+# G_rev = [[], [(0, 2), (2, 4), (3, 2)], [(0, 6), (1, 3)], [(1, 1)], [(1, 4), (2, 2), (3, 4)]]
 # # アークの集合(始点, 終点, コスト, 増加分)
 # A = ((0, 1, 2, 2), (0, 2, 6, 2), (1, 2, 3, 4), (1, 3, 1, 2), (1, 4, 4, 8), (2, 1, 4, 2), (2, 4, 2, 4), (3, 1, 2, 4), (3, 4, 4, 4))
 # # アークの集合(始点, 終点)
@@ -78,18 +78,20 @@ def get_T(prev):
 # # グラフ(隣接リスト)[始点, 終点, コスト, 増加分]
 # G = [[[0, 1, 1, 2], [0, 2, 1, 2]], [[1, 4, 1, 10]], [[2, 3, 1, 2], [2, 4, 3, 1]], [[3, 4, 1, 10]], []]
 # # 逆向きのグラフ(隣接リスト)(終点, コスト)
-# G_reverse = [[], [(0, 1)], [(0, 1)], [(2, 1)], [(1, 1), (2, 3), (3, 1)]]
+# G_rev = [[], [(0, 1)], [(0, 1)], [(2, 1)], [(1, 1), (2, 3), (3, 1)]]
 # # アークの集合(始点, 終点, コスト, 増加分)
 # A = ((0, 1, 1, 2), (0, 2, 1, 2), (1, 4, 1, 10), (2, 3, 1, 2), (2, 4, 3, 1), (3, 4, 1, 10))
 # # アークの集合(始点, 終点)
 # Arcs = ((0, 1), (0, 2), (1, 4), (2, 3), (2, 4), (3, 4))
 def get_DSPI_free(input_list):
+    INF = 10 ** 9
     # input_list = list(map(int, input().split()))
     n, m, s, t, budget = input_list[0], input_list[1], input_list[2], input_list[3], input_list[4]
     # graph = nx.DiGraph()
     # edge_list = []
     G = [[] for i in range(n)]
-    G_reverse = [[] for i in range(n)]
+    global G_rev
+    G_rev = [[] for i in range(n)]
     # A, Arcs = (), ()
     list_A, list_Arcs = [], []
 
@@ -97,7 +99,7 @@ def get_DSPI_free(input_list):
         a, b, w, p = input_list[i*4+5], input_list[i*4+6], input_list[i*4+7], input_list[i*4+8]
         # edge_list.append((a, b, {'weight':w, 'plus':p}))
         G[a].append([a, b, w, p])
-        G_reverse[b].append([a, w])
+        G_rev[b].append([a, w])
         # A += ((a, b, w, p), )
         # Arcs += ((a, b), )
         list_A.append((a, b, w, p))
@@ -105,18 +107,17 @@ def get_DSPI_free(input_list):
 
     for i in range(n):
         G[i].sort()
-        G_reverse[i].sort()
+        G_rev[i].sort()
     list_A.sort()
     list_Arcs.sort()
-    tuple_A = list_to_tuple(list_A)
-    tuple_Arcs = list_to_tuple(list_Arcs)
-
+    tuple_A = my_modules.list_to_tuple(list_A)
+    tuple_Arcs = my_modules.list_to_tuple(list_Arcs)
     # print('n, m, s, t, budget')
     # print(n, m, s, t, budget)
     # print('G')
     # print(G)
-    # print('G_reverse')
-    # print(G_reverse)
+    # print('G_rev')
+    # print(G_rev)
     # print('tuple_A')
     # print(tuple_A)
     # print('tuple_Arcs')
@@ -127,16 +128,17 @@ def get_DSPI_free(input_list):
     z_bar = defaultdict(list)
     next_z_star = defaultdict(list)
     next_z_bar = defaultdict(list)
+    input_list
 
     # 何も阻止されていない場合で逆向きのダイクストラを行い, 前にいた頂点のリストとコストを出力
-    prev, d = dijkstra(n-1, n)
+    prev, d = my_modules.dijkstra(n - 1, n, INF, G_rev)
     # print('Sが空集合のときのprev')
     # print(prev)
     # print('Sが空集合のときのtからのコスト')
     # print(d)
 
     # 経路を復元して, all-to-t-shortest path tree Tを作成
-    T = get_T(prev)
+    T = my_modules.get_T(n, prev)
     # print('T')
     # print(T)
 
@@ -147,23 +149,23 @@ def get_DSPI_free(input_list):
 
     # |S|==bの各Sについて, Tの辺を含むか判定し, 含む場合はGを定義してダイクストラを行う.
     for S in c:
-        G_reverse = [[] for i in range(n)]
+        G_rev = [[] for i in range(n)]
         flag = False
         for j in tuple_A:
             if j in S:
                 if (j[0], j[1]) in T: # Tに含まれているかどうかの判定
                     flag = True
-                G_reverse[j[1]].append((j[0], j[2] + j[3]))
+                G_rev[j[1]].append((j[0], j[2] + j[3]))
             else:
-                G_reverse[j[1]].append((j[0], j[2]))
+                G_rev[j[1]].append((j[0], j[2]))
         if flag:
-            prev, list_z_star_S = dijkstra(n-1, n)
+            prev, list_z_star_S = my_modules.dijkstra(n - 1, n, INF, G_rev)
             # print('S, z_star_S, prev')
             # print(S, list_z_star_S, prev)
             z_star[S] = list_z_star_S
             next_z_star[S] = [[(), -1] for i in range(n)]
             # print(next_z_star[S])
-            for i in range(n-1):
+            for i in range(n - 1):
                 next_z_star[S][i] = (S, prev[i])
     # print('z_star')
     # print(z_star)
@@ -176,7 +178,7 @@ def get_DSPI_free(input_list):
             z_bar[S] = [0] * n # continueしたものは0が代入される
             next_z_bar[S] = [[(), -1] for i in range(n)]
             next_z_star[S] = [[(), -1] for i in range(n)]
-            list_S = tuple_to_list(S)
+            list_S = my_modules.tuple_to_list(S)
             # print('list_S')
             # print(list_S)
             for i in range(n):
@@ -205,7 +207,7 @@ def get_DSPI_free(input_list):
                         if  len(new_S) > budget:
                             continue
                         new_S.sort()
-                        new_S = list_to_tuple(new_S)
+                        new_S = my_modules.list_to_tuple(new_S)
                         # z_star[new_S]が存在するかの判定
                         if z_star[new_S] == []:
                             # print('含まれないの発見')
@@ -215,7 +217,7 @@ def get_DSPI_free(input_list):
                         # new_min_S = new_S
                         for list_arc in G[i]:
                             # c_tildeの更新
-                            arc = list_to_tuple(list_arc)
+                            arc = my_modules.list_to_tuple(list_arc)
                             if arc in new_S:
                                 c_tilde = arc[2] + arc[3]
                             else:
