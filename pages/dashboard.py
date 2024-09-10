@@ -526,7 +526,8 @@ def display():
     if st.button('Run DSPI'):
         if option_type == 'Cost increase':
             if option_constraints == 'free (Interdict any number of arcs at a time)':
-                z_star, next_z_star, tuple_Arcs, tuple_A = DSPI_free.get_DSPI_free(st.session_state['input_list'])
+                z_star, next_z_star, tuple_Arcs, tuple_A, res_flags = DSPI_free.get_DSPI_free(st.session_state['input_list'])
+                st.text(res_flags)
                 graph_drawing_cost_increase(st.session_state['input_list'], z_star, next_z_star, tuple_Arcs, tuple_A, st.session_state['graph_layout'])
             elif option_constraints == 'at most (Interdict up to one at a time)':
                 z_star, next_z_star, tuple_Arcs, tuple_A = DSPI_at_most.get_DSPI_at_most(st.session_state['input_list'])
