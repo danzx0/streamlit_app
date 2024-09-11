@@ -3,7 +3,7 @@ import matplotlib.pyplot as plt
 
 import networkx as nx
 
-from services import DSPI_free, DSPI_at_most, DSPI_at_least, DSPI_exactly, my_modules, my_networkx as my_nx
+from services import DSPI_free, DSPI_at_most, DSPI_at_least, DSPI_exactly, arc_remove_b_simulation, my_modules, my_networkx as my_nx
 
 def graph_drawing_cost_increase_0(input_list, graph_layout):
     # グラフの描画準備
@@ -526,8 +526,7 @@ def display():
     if st.button('Run DSPI'):
         if option_type == 'Cost increase':
             if option_constraints == 'free (Interdict any number of arcs at a time)':
-                z_star, next_z_star, tuple_Arcs, tuple_A, res_flags = DSPI_free.get_DSPI_free(st.session_state['input_list'])
-                st.text(res_flags)
+                z_star, next_z_star, tuple_Arcs, tuple_A = DSPI_free.get_DSPI_free(st.session_state['input_list'])
                 graph_drawing_cost_increase(st.session_state['input_list'], z_star, next_z_star, tuple_Arcs, tuple_A, st.session_state['graph_layout'])
             elif option_constraints == 'at most (Interdict up to one at a time)':
                 z_star, next_z_star, tuple_Arcs, tuple_A = DSPI_at_most.get_DSPI_at_most(st.session_state['input_list'])
@@ -547,3 +546,13 @@ def display():
                 st.text('作成中')
             else:
                 st.text('作成中')
+
+    epoch = st.slider('number of nodes', 10, 10000, 100) # min, max, default
+    a = st.slider('number of arcs', 2, 20, 10) # min, max, default
+    b = st.slider('budget for interdiction', 2, 21, 21) # min, max, default
+    # LPで削除できる辺の数を求めるシミュレーション
+    if st.button('Run simulation'):
+        averages = arc_remove_b_simulation.run_arc_remove_b_simulation(epoch, a, b)
+        st.text(averages)
+
+    st.write('[my_networkx.py](https://stackoverflow.com/questions/22785849/drawing-multiple-edges-between-two-nodes-with-networkx) by [kcoskun](https://stackoverflow.com/users/6600974/kcoskun)&[Bracula](https://stackoverflow.com/users/6326375/bracula), is licensed under [CC BY-SA 4.0](https://creativecommons.org/licenses/by-sa/4.0/)')

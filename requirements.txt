@@ -46,6 +46,7 @@ prompt_toolkit==3.0.47
 protobuf==5.28.0
 psutil==6.0.0
 ptyprocess==0.7.0
+PuLP==2.9.0
 pure_eval==0.2.3
 pyarrow==17.0.0
 pydeck==0.9.1
