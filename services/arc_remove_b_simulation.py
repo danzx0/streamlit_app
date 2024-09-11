@@ -5,6 +5,7 @@ import pulp
 from. import my_modules
 
 def run_arc_remove_b_simulation(epoch, a, b):
+    INF = 10**9
     # epoch = 10000
     averages = []
     # input_lists = []
@@ -88,7 +89,7 @@ def run_arc_remove_b_simulation(epoch, a, b):
             # graph = nx.DiGraph()
             # edge_list = []
             G = [[] for i in range(n)]
-            G_reverse = [[] for i in range(n)]
+            G_rev = [[] for i in range(n)]
             # G_interdicted_reverse = [[] for i in range(n)]
             # A, Arcs = (), ()
             list_A = []
@@ -97,7 +98,7 @@ def run_arc_remove_b_simulation(epoch, a, b):
                 a, b, w, p = input_list[i*4+5], input_list[i*4+6], input_list[i*4+7], input_list[i*4+8]
                 # edge_list.append((a, b, {'weight':w, 'plus':p}))
                 G[a].append([a, b, w, p])
-                G_reverse[b].append([a, w])
+                G_rev[b].append([a, w])
                 # G_interdicted_reverse[b].append([a, w + p])
                 # A += ((a, b, w, p), )
                 # Arcs += ((a, b), )
@@ -106,7 +107,7 @@ def run_arc_remove_b_simulation(epoch, a, b):
 
             for i in range(n):
                 G[i].sort()
-                G_reverse[i].sort()
+                G_rev[i].sort()
                 # G_interdicted_reverse[i].sort()
             list_A.sort()
             # list_Arcs.sort()
@@ -114,7 +115,7 @@ def run_arc_remove_b_simulation(epoch, a, b):
             # tuple_Arcs = my_modules.list_to_tuple(list_Arcs)
 
             # 何も阻止されていない場合で逆向きのダイクストラを行い, 前にいた頂点のリストとコストを出力
-            prev, d = my_modules.dijkstra(n-1, n)
+            prev, d = my_modules.dijkstra(n-1, n, INF, G_rev)
             # print('Sが空集合のときのprev')
             # print(prev)
             # print('Sが空集合のときのtからのコスト')
