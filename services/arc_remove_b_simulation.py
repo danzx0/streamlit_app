@@ -85,7 +85,7 @@ def run_arc_remove_b_simulation(epoch, a, b):
             # print(*input_list)
             # input_lists.append(input_list)
 
-            n, m, s, t, budget = input_list[0], input_list[1], input_list[2], input_list[3], input_list[4]
+            # n, m, s, t, budget = input_list[0], input_list[1], input_list[2], input_list[3], input_list[4]
             # graph = nx.DiGraph()
             # edge_list = []
             G = [[] for i in range(n)]
