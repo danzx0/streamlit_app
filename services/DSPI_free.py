@@ -84,7 +84,6 @@ from . import my_modules
 # # アークの集合(始点, 終点)
 # Arcs = ((0, 1), (0, 2), (1, 4), (2, 3), (2, 4), (3, 4))
 def get_DSPI_free(input_list):
-    res_flags = []
     INF = 10 ** 9
     # input_list = list(map(int, input().split()))
     n, m, s, t, budget = input_list[0], input_list[1], input_list[2], input_list[3], input_list[4]
@@ -255,32 +254,15 @@ def get_DSPI_free(input_list):
                             c_tilde = tuple_A[res][2] + tuple_A[res][3]
                         else:
                             c_tilde = tuple_A[res][2]
-                        # if l_caron[i] > j[0] + c_tilde and l_caron[i] > z_bar[S][i]:
-                        #     l_caron[i] = j[0] + c_tilde
-                        #     if l_caron[i] < z_bar[S][i]:# 阻止する場合
-                        #         l[i] = z_bar[S][i]
-                        #         next_z_star[S][i] = (next_z_bar[S][i][0], next_z_bar[S][i][1])
-                        #     else:# 阻止しない場合
-                        #         l[i] = l_caron[i]
-                        #         next_z_star[S][i] = [S, j[1]]
-                        #     heappush(l_Q, (l[i], i))
-                        flags = [False, False]
-                        if l_caron[i] > j[0] + c_tilde:
-                            flags[0] = True
-                            if l_caron[i] > z_bar[S][i]:
-                                flags[1] = True
-                                l_caron[i] = j[0] + c_tilde
-                                if l_caron[i] < z_bar[S][i]:# 阻止する場合
-                                    l[i] = z_bar[S][i]
-                                    next_z_star[S][i] = (next_z_bar[S][i][0], next_z_bar[S][i][1])
-                                else:# 阻止しない場合
-                                    l[i] = l_caron[i]
-                                    next_z_star[S][i] = [S, j[1]]
-                                heappush(l_Q, (l[i], i))
-                        if flags[0] and not flags[1]:
-                            res_flags.append([S, (i, j), 0])
-                        elif not flags[0] and flags[1]:
-                            res_flags.append([S, (i, j), 1])
+                        if l_caron[i] > j[0] + c_tilde and l_caron[i] > z_bar[S][i]:
+                            l_caron[i] = j[0] + c_tilde
+                            if l_caron[i] < z_bar[S][i]:# 阻止する場合
+                                l[i] = z_bar[S][i]
+                                next_z_star[S][i] = (next_z_bar[S][i][0], next_z_bar[S][i][1])
+                            else:# 阻止しない場合
+                                l[i] = l_caron[i]
+                                next_z_star[S][i] = [S, j[1]]
+                            heappush(l_Q, (l[i], i))
             ans = copy.deepcopy(l)
             z_star[S] = ans
             # print('z_star[S]')
@@ -293,7 +275,7 @@ def get_DSPI_free(input_list):
     # print(z_star)
     # for i in z_star.items():
     #     print(i)
-    return z_star, next_z_star, tuple_Arcs, tuple_A, res_flags
+    return z_star, next_z_star, tuple_Arcs, tuple_A
 
 # now_node = 0
 # now_S = tuple()
