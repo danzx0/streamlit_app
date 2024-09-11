@@ -547,9 +547,9 @@ def display():
             else:
                 st.text('作成中')
 
-    epoch = st.slider('number of nodes', 10, 10000, 100) # min, max, default
-    a = st.slider('number of arcs', 2, 20, 10) # min, max, default
-    b = st.slider('budget for interdiction', 2, 21, 21) # min, max, default
+    epoch = st.slider('epoch', 10, 10000, 100) # min, max, default
+    a = st.slider('min_num_of_nodes', 2, 20, 10) # min, max, default
+    b = st.slider('max_num_of_nodes', 2, 21, 21) # min, max, default
     # LPで削除できる辺の数を求めるシミュレーション
     if st.button('Run simulation'):
         averages = arc_remove_b_simulation.run_arc_remove_b_simulation(epoch, a, b)
