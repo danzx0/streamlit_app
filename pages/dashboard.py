@@ -41,8 +41,9 @@ def graph_drawing_cost_increase_0(input_list, graph_layout):
     nx.draw_networkx_edge_labels(graph, pos, ax=ax, edge_labels=straight_edge_labels, rotate=False)
     # plt.show()
     st.pyplot(fig)
+    return pos
 
-def graph_drawing_cost_increase(input_list, z_star, next_z_star, tuple_Arcs, tuple_A, graph_layout):
+def graph_drawing_cost_increase(input_list, z_star, next_z_star, tuple_Arcs, tuple_A, pos):
     now_node = 0
     now_S = tuple()
     now_cost = 0
@@ -55,14 +56,14 @@ def graph_drawing_cost_increase(input_list, z_star, next_z_star, tuple_Arcs, tup
         edge_list.append((a, b, {'weight':w, 'plus':p}))
 
     graph.add_edges_from(edge_list)
-    if graph_layout == 'circular':
-        pos  = nx.circular_layout(graph)
-    elif graph_layout == 'kamada_kawai':
-        pos  = nx.kamada_kawai_layout(graph)
-    else:
-        pos  = nx.random_layout(graph)
-    for i in range(n):
-        pos[i][0] = pos[i][0] * (-1)
+    # if graph_layout == 'circular':
+    #     pos  = nx.circular_layout(graph)
+    # elif graph_layout == 'kamada_kawai':
+    #     pos  = nx.kamada_kawai_layout(graph)
+    # else:
+    #     pos  = nx.random_layout(graph)
+    # for i in range(n):
+    #     pos[i][0] = pos[i][0] * (-1)
     fig, ax = plt.subplots()
     nx.draw_networkx_nodes(graph, pos, ax = ax)
     nx.draw_networkx_labels(graph, pos, ax = ax)
@@ -481,19 +482,23 @@ def display():
         st.session_state['budget'] = 1
     if 'graph_layout' not in st.session_state:
         st.session_state['graph_layout'] = ''
+    if 'pos' not in st.session_state:
+        st.session_state['pos'] = []
     # Warningの非表示
     # st.set_option('deprecation.showPyplotGlobalUse', False)
     # 入力の受け取り
     if st.checkbox('input by text'):
         input_text = st.text_input('Graph Data', value=st.session_state['input_list_str'])
-        st.session_state['input_list'] = list(map(int, input_text.split()))
+        input_list = list(map(int, input_text.split()))
+        st.session_state['input_list'] = input_list
     else:
-        num_of_nodes = st.slider('number of nodes', 2, 20, 5) # min, max, default
-        num_of_arcs = st.slider('number of arcs', num_of_nodes-1, num_of_nodes*(num_of_nodes-1) - (num_of_nodes-1), num_of_nodes-1) # min, max, default
-        num_of_budgets = st.slider('budget for interdiction', 1, 4, 1) # min, max, default
+        num_of_nodes = st.number_input('number of nodes', 2, 20, 5) # min, max, default
+        num_of_arcs = st.number_input('number of arcs', num_of_nodes-1, num_of_nodes*(num_of_nodes-1) - (num_of_nodes-1), num_of_nodes-1) # min, max, default
+        num_of_budgets = st.number_input('budget for interdiction', 1, 4, 1) # min, max, default
         if st.session_state['input_list'] and st.session_state['budget'] != num_of_budgets:
             st.session_state['budget'] = num_of_budgets
-            st.session_state['input_list'] = st.session_state['input_list'][:4] + [num_of_budgets] + st.session_state['input_list'][5:]
+            input_list = st.session_state['input_list'][:4] + [num_of_budgets] + st.session_state['input_list'][5:]
+            st.session_state['input_list'] = input_list
             input_list_str = ''
             for i in range(len(st.session_state['input_list'])):
                 input_list_str += str(st.session_state['input_list'][i])
@@ -510,33 +515,36 @@ def display():
                     input_list_str += ' '
             st.session_state['input_list_str'] = input_list_str
         input_text = st.text_input('Graph Data', value=st.session_state['input_list_str'])
-        st.session_state['input_list'] = list(map(int, input_text.split()))
+        input_list = list(map(int, input_text.split()))
+        st.session_state['input_list'] = input_list
     # モデル選択
-    option_type = st.selectbox('Select the type of Interdiction', ['Cost increase', 'Remove arcs'])
-    option_constraints = st.selectbox('Select constraint', ['free (Interdict any number of arcs at a time)', 'at most (Interdict up to one at a time)', 'at least (More than 1 Interdict at a time)', 'exactly (Interdict 1 at a time)'])
-    option_graph_layout = st.selectbox('Select graph layout', ['circular', 'kamada_kawai', 'random'])
+    st.header('Select the model')
+    option_type = st.selectbox('type of Interdiction', ['Cost increase', 'Remove arcs'])
+    option_constraints = st.selectbox('constraint', ['free (Interdict any number of arcs at a time)', 'at most (Interdict up to one at a time)', 'at least (More than 1 Interdict at a time)', 'exactly (Interdict 1 at a time)'])
+    option_graph_layout = st.selectbox('graph layout', ['circular', 'kamada_kawai', 'random'])
     st.session_state['graph_layout'] = option_graph_layout
     if st.session_state['input_list']:
         if option_type == 'Cost increase':
-            graph_drawing_cost_increase_0(st.session_state['input_list'], st.session_state['graph_layout'])
+            pos = graph_drawing_cost_increase_0(st.session_state['input_list'], st.session_state['graph_layout'])
         else:
-            graph_drawing_remove_arcs_0(st.session_state['input_list'], st.session_state['graph_layout'])
+            pos = graph_drawing_remove_arcs_0(st.session_state['input_list'], st.session_state['graph_layout'])
+        st.session_state['pos'] = pos
 
     # DSPIの実行とグラフ描画を実行するボタン
     if st.button('Run DSPI'):
         if option_type == 'Cost increase':
             if option_constraints == 'free (Interdict any number of arcs at a time)':
                 z_star, next_z_star, tuple_Arcs, tuple_A = DSPI_free.get_DSPI_free(st.session_state['input_list'])
-                graph_drawing_cost_increase(st.session_state['input_list'], z_star, next_z_star, tuple_Arcs, tuple_A, st.session_state['graph_layout'])
+                graph_drawing_cost_increase(st.session_state['input_list'], z_star, next_z_star, tuple_Arcs, tuple_A, st.session_state['pos'])
             elif option_constraints == 'at most (Interdict up to one at a time)':
                 z_star, next_z_star, tuple_Arcs, tuple_A = DSPI_at_most.get_DSPI_at_most(st.session_state['input_list'])
-                graph_drawing_cost_increase(st.session_state['input_list'], z_star, next_z_star, tuple_Arcs, tuple_A, st.session_state['graph_layout'])
+                graph_drawing_cost_increase(st.session_state['input_list'], z_star, next_z_star, tuple_Arcs, tuple_A, st.session_state['pos'])
             elif option_constraints == 'at least (More than 1 Interdict at a time)':
                 z_star, next_z_star, tuple_Arcs, tuple_A = DSPI_at_least.get_DSPI_at_least(st.session_state['input_list'])
-                graph_drawing_cost_increase(st.session_state['input_list'], z_star, next_z_star, tuple_Arcs, tuple_A, st.session_state['graph_layout'])
+                graph_drawing_cost_increase(st.session_state['input_list'], z_star, next_z_star, tuple_Arcs, tuple_A, st.session_state['pos'])
             else:
                 z_star, next_z_star, tuple_Arcs, tuple_A = DSPI_exactly.get_DSPI_exactly(st.session_state['input_list'])
-                graph_drawing_cost_increase(st.session_state['input_list'], z_star, next_z_star, tuple_Arcs, tuple_A, st.session_state['graph_layout'])
+                graph_drawing_cost_increase(st.session_state['input_list'], z_star, next_z_star, tuple_Arcs, tuple_A, st.session_state['pos'])
         else:
             if option_constraints == 'free (Interdict any number of arcs at a time)':
                 st.text('作成中')
@@ -547,9 +555,11 @@ def display():
             else:
                 st.text('作成中')
 
-    epoch = st.slider('epoch：エポック数', 10, 10000, 100) # min, max, default
-    a = st.slider('min_num_of_nodes：ノード数の最小値', 2, 20, 10) # min, max, default
-    b = st.slider('max_num_of_nodes：ノード数の最大値', 2, 21, 21) # min, max, default
+    # シミュレーション
+    st.header('Simulation of removing arcs')
+    epoch = st.number_input('epoch：エポック数', 10, 10000, 100) # min, max, default
+    a = st.number_input('min_num_of_nodes：ノード数の最小値', 2, 20, 10) # min, max, default
+    b = st.number_input('max_num_of_nodes：ノード数の最大値', 2, 21, 21) # min, max, default
     # LPで削除できる辺の数を求めるシミュレーション
     if st.button('Run simulation'):
         averages = arc_remove_b_simulation.run_arc_remove_b_simulation(epoch, a, b)
